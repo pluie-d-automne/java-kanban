@@ -28,7 +28,7 @@ public class Epic extends Task{
         for (Task task : subtasks.values()) {
             if (! taskStatuses.contains(task.getStatus())) {
                 taskStatuses.add(task.getStatus());
-            };
+            }
         }
         if (taskStatuses.isEmpty()) {
             setStatus(TaskStatus.NEW);
