@@ -14,4 +14,13 @@ public class Task {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "{Task_id: " + id + "; Name: '" + name + "'; Status: " + status + "; Description: " + description + "}";
+    }
+
+    public String getName() {
+        return name;
+    }
 }
