@@ -13,4 +13,8 @@ public class Subtask extends Task{
     public Integer getEpicId() {
         return epicId;
     }
+
+    public void dropEpicId() {
+        epicId = null;
+    }
 }

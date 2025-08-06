@@ -2,7 +2,7 @@ public class Task {
     private final String name;
     private final String description;
     private final int id;
-    private final TaskStatus status;
+    private TaskStatus status;
 
     public Task( String name, String description, int id, TaskStatus status) {
         this.description = description;
@@ -22,5 +22,13 @@ public class Task {
 
     public String getName() {
         return name;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 }

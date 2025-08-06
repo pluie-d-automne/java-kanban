@@ -1,3 +1,5 @@
+import javax.sound.midi.Soundbank;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -36,10 +38,29 @@ public class Main {
         taskManager.createTask(
                 new Subtask(
                         "Купить билеты на самолёт",
-                        "Выбрать оптимальный реёс и купить билеты",
+                        "Выбрать оптимальный рейс и купить билеты",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
                         taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+        taskManager.createTask(
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        taskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        taskManager.createTask(
+                new Subtask(
+                        "Сделать дамашнее задание",
+                        "Сделать домашнее задание по текущему спринту",
+                        taskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        taskManager.getEpicIdByName("Освоить Java")
                 )
         );
 
@@ -47,7 +68,47 @@ public class Main {
         System.out.println(taskManager.getStandaloneTasks());
         System.out.println("\nСписок эпиков:");
         System.out.println(taskManager.getEpicTasks());
+        System.out.println("\nСписок подзадач:");
+        System.out.println(taskManager.getSubTasks());
+        System.out.println("\nНайдём эпик по id = 3:");
+        System.out.println(taskManager.getTaskById(3));
+        System.out.println("И выведем его позадачи:");
         System.out.println(taskManager.getEpicSubtasks(3));
+        System.out.println("\nОбновим статусы подзадач");
+        taskManager.updateTask(
+                7,
+                new Subtask(
+                        "Сделать дамашнее задание",
+                        "Сделать домашнее задание по текущему спринту",
+                        7,
+                        TaskStatus.DONE,
+                        taskManager.getEpicIdByName("Освоить Java")
+                )
+        );
+        taskManager.updateTask(
+                6,
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        6,
+                        TaskStatus.IN_PROGRESS,
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+        System.out.println("\nСписок эпиков:");
+        System.out.println(taskManager.getEpicTasks());
+        System.out.println("\nСписок подзадач:");
+        System.out.println(taskManager.getSubTasks());
+
+        System.out.println("\nУдалим задачу, подзадачу и эпик");
+        taskManager.dropTaskById(2);
+        taskManager.dropTaskById(4);
+        taskManager.dropTaskById(6);
+
+        System.out.println("\nСписок отдельных задач:");
+        System.out.println(taskManager.getStandaloneTasks());
+        System.out.println("\nСписок эпиков:");
+        System.out.println(taskManager.getEpicTasks());
         System.out.println("\nСписок подзадач:");
         System.out.println(taskManager.getSubTasks());
     }
