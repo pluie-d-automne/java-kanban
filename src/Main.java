@@ -1,3 +1,9 @@
+import manager.TaskManager;
+import task.Epic;
+import task.Subtask;
+import task.Task;
+import task.TaskStatus;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -63,14 +69,14 @@ public class Main {
         );
 
         System.out.println("\nСписок отдельных задач:");
-        System.out.println(taskManager.getStandaloneTasks());
+        System.out.println(taskManager.getTasks());
         System.out.println("\nСписок эпиков:");
         System.out.println(taskManager.getEpicTasks());
         System.out.println("\nСписок подзадач:");
         System.out.println(taskManager.getSubTasks());
         System.out.println("\nНайдём эпик по id = 3:");
-        System.out.println(taskManager.getTaskById(3));
-        System.out.println("И выведем его позадачи:");
+        System.out.println(taskManager.getEpicById(3));
+        System.out.println("И выведем его подзадачи:");
         System.out.println(taskManager.getEpicSubtasks(3));
         System.out.println("\nОбновим статусы подзадач");
         taskManager.updateTask(
@@ -104,7 +110,7 @@ public class Main {
         taskManager.dropTaskById(6);
 
         System.out.println("\nСписок отдельных задач:");
-        System.out.println(taskManager.getStandaloneTasks());
+        System.out.println(taskManager.getTasks());
         System.out.println("\nСписок эпиков:");
         System.out.println(taskManager.getEpicTasks());
         System.out.println("\nСписок подзадач:");

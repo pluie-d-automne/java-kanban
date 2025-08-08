@@ -1,3 +1,5 @@
+package task;
+
 public class Subtask extends Task{
     private Integer epicId;
 
@@ -14,7 +16,4 @@ public class Subtask extends Task{
         return epicId;
     }
 
-    public void dropEpicId() {
-        epicId = null;
-    }
 }
