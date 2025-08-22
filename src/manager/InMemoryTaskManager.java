@@ -14,6 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epicTasks = new HashMap<>();
     private final Map<Integer, Subtask> subTasks = new HashMap<>();
+    private final List<Task> taskHistory = new ArrayList<>();
     private int taskCounter = 0;
 
 
@@ -60,7 +61,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         if (tasks.containsKey(id)) {
-            return tasks.get(id);
+            Task task = tasks.get(id);
+            updateTaskHistory(task);
+            return task;
         } else {
             System.out.println("Задачи с таким id не существует");
             return null;
@@ -70,7 +73,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getEpicById(int id) {
         if (epicTasks.containsKey(id)) {
-            return epicTasks.get(id);
+            Epic task = epicTasks.get(id);
+            updateTaskHistory(task);
+            return task;
         } else {
             System.out.println("Эпика с таким id не существует");
             return null;
@@ -80,7 +85,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getSubtaskById(int id) {
         if (subTasks.containsKey(id)) {
-            return subTasks.get(id);
+            Subtask task = subTasks.get(id);
+            updateTaskHistory(task);
+            return task;
         } else {
             System.out.println("Подзадачи с таким id не существует");
             return null;
@@ -213,5 +220,17 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
+    }
+
+    public void updateTaskHistory(Task task) {
+        if (taskHistory.size() == 10) {
+            taskHistory.removeFirst();
+        }
+        taskHistory.add(task);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return taskHistory;
     }
 }

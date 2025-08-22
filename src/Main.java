@@ -67,6 +67,10 @@ public class Main {
                         taskManager.getEpicIdByName("Освоить Java")
                 )
         );
+        System.out.println("\nОбратимся к задачам и проверим историю:");
+        taskManager.getEpicById(3);
+        taskManager.getTaskById(1);
+        System.out.println(taskManager.getHistory());
 
         System.out.println("\nСписок отдельных задач:");
         System.out.println(taskManager.getTasks());
