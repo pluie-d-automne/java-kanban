@@ -33,5 +33,5 @@ public interface TaskManager {
 
     int updateTask(int taskId, Task newTask);
 
-    List<Subtask> getEpicSubtasks(int epicId);
+    List<Task> getEpicSubtasks(int epicId);
 }
