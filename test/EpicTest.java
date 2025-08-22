@@ -9,6 +9,23 @@ import java.util.List;
 
 class EpicTest {
     @Test
+    void checkEpicEqualsById(){
+        Epic task1 = new Epic(
+                "Эпик 1",
+                "-",
+                1,
+                TaskStatus.IN_PROGRESS
+        );
+        Task task2 = new Epic(
+                "Эпик 32",
+                "123",
+                1,
+                TaskStatus.NEW
+        );
+        Assertions.assertEquals(task1, task2);
+    }
+
+    @Test
     void cantAddEpicAsSubtaskToEpic() {
         Epic firstEpic = new Epic(
                 "Собраться в отпуск",
