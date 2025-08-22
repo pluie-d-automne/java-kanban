@@ -24,4 +24,16 @@ class SubtaskTest {
         );
         Assertions.assertEquals(task1, task2);
     }
+    @Test
+    void cantSetSubtaskItsOwnEpic(){
+        Subtask subtask = new Subtask(
+                "Сабтаск 1",
+                "-",
+                1,
+                TaskStatus.IN_PROGRESS,
+                null
+        );
+        subtask.setEpicId(1);
+        Assertions.assertNotEquals(subtask.getEpicId(), subtask.getId());
+    }
 }
