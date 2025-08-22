@@ -14,9 +14,8 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epicTasks = new HashMap<>();
     private final Map<Integer, Subtask> subTasks = new HashMap<>();
-    private final List<Task> taskHistory = new ArrayList<>();
     private int taskCounter = 0;
-
+    private final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
     @Override
     public int createTaskId() {
@@ -62,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskById(int id) {
         if (tasks.containsKey(id)) {
             Task task = tasks.get(id);
-            updateTaskHistory(task);
+            inMemoryHistoryManager.add(task);
             return task;
         } else {
             System.out.println("Задачи с таким id не существует");
@@ -74,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getEpicById(int id) {
         if (epicTasks.containsKey(id)) {
             Epic task = epicTasks.get(id);
-            updateTaskHistory(task);
+            inMemoryHistoryManager.add(task);
             return task;
         } else {
             System.out.println("Эпика с таким id не существует");
@@ -86,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getSubtaskById(int id) {
         if (subTasks.containsKey(id)) {
             Subtask task = subTasks.get(id);
-            updateTaskHistory(task);
+            inMemoryHistoryManager.add(task);
             return task;
         } else {
             System.out.println("Подзадачи с таким id не существует");
@@ -222,15 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public void updateTaskHistory(Task task) {
-        if (taskHistory.size() == 10) {
-            taskHistory.removeFirst();
-        }
-        taskHistory.add(task);
-    }
-
-    @Override
     public List<Task> getHistory() {
-        return taskHistory;
+        return inMemoryHistoryManager.getHistory();
     }
 }
