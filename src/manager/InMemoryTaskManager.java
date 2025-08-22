@@ -132,6 +132,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         int taskId = task.getId();
+        if (taskId > taskCounter) {
+            taskCounter = taskId;
+        }
         switch (task.getClass().getSimpleName()) {
             case "Epic" -> epicTasks.put(taskId, (Epic) task);
             case "Subtask" -> {
