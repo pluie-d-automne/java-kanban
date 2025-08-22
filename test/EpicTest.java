@@ -26,24 +26,19 @@ class EpicTest {
     }
 
     @Test
-    void cantAddEpicAsSubtaskToEpic() {
-        Epic firstEpic = new Epic(
+    void cantAddEpicAsItsOwnSubtask() {
+        Epic epic = new Epic(
                 "Собраться в отпуск",
                 "Спланировать и подготовить всё, что нужно для хорошего отпуска",
                 1,
                 TaskStatus.NEW);
-        Epic secondEpic = new Epic(
-                "Подготовиться к Новому году",
-                "Подготовительные мероприятия к Новому году",
-                2,
-                TaskStatus.NEW);
         List<Task> subtasks = new ArrayList<>();
-        subtasks.add(secondEpic);
-        firstEpic.setSubtasks(subtasks);
-        List<Task> addedSubtasks = firstEpic.getSubtasks();
+        subtasks.add(epic);
+        epic.setSubtasks(subtasks);
+        List<Task> addedSubtasks = epic.getSubtasks();
         boolean result = false;
         for (Task task : addedSubtasks) {
-            if (task.getId() == 2) {
+            if (task.getId() == epic.getId()) {
                 result = true;
                 break;
             }

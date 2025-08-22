@@ -15,7 +15,7 @@ public class Epic extends Task{
     }
 
     public void setSubtasks(List<Task> subtasks) {
-        subtasks.removeIf(task -> task instanceof Epic);
+        subtasks.removeIf(task -> task.equals(this));
         this.subtasks = subtasks;
     }
 }
