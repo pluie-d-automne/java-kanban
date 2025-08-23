@@ -70,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getEpicById(int id) {
+    public Epic getEpicById(int id) {
         if (epicTasks.containsKey(id)) {
             Epic task = epicTasks.get(id);
             historyManager.add(task);
@@ -82,7 +82,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getSubtaskById(int id) {
+    public Subtask getSubtaskById(int id) {
         if (subTasks.containsKey(id)) {
             Subtask task = subTasks.get(id);
             historyManager.add(task);
@@ -94,14 +94,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void dropTaskById(int id) {
+    public int dropTaskById(int id) {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
         } else if (epicTasks.containsKey(id)) {
-            List<Task> epicSubtasks = getEpicSubtasks(id);
+            List<Subtask> epicSubtasks = getEpicSubtasks(id);
 
-            for (Task task : epicSubtasks) {
-                Subtask subtask = (Subtask) task;
+            for (Subtask subtask : epicSubtasks) {
                 subtask.setEpicId(null);
             }
 
@@ -121,6 +120,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Задачи с таким id не существует");
         }
+        return id;
     }
 
     public Integer getEpicIdByName(String name) {
@@ -193,9 +193,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getEpicSubtasks(int epicId) {
+    public List<Subtask> getEpicSubtasks(int epicId) {
+        List<Subtask> epicSubtasks = new ArrayList<>();
         Epic epic = epicTasks.get(epicId);
-        return epic.getSubtasks();
+        for (Task task : epic.getSubtasks()) {
+            epicSubtasks.add((Subtask) task);
+        }
+        return epicSubtasks;
     }
 
     public void addSubtaskToEpic(Epic epic, Subtask subtask) {
@@ -206,7 +210,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void calculateEpicStatus(int epicId) {
         List<TaskStatus> taskStatuses = new ArrayList<>();
-        List<Task> subtasks = getEpicSubtasks(epicId);
+        List<Subtask> subtasks = getEpicSubtasks(epicId);
         Epic epic = epicTasks.get(epicId);
         TaskStatus status;
 
