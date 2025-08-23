@@ -9,7 +9,7 @@ import java.util.List;
 
 class EpicTest {
     @Test
-    void checkEpicEqualsById(){
+    void checkEpicEqualsById() {
         Epic task1 = new Epic(
                 "Эпик 1",
                 "-",

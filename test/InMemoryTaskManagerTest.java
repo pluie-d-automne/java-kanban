@@ -60,7 +60,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkTaskAddedUnchanged(){
+    void checkTaskAddedUnchanged() {
         int id = 1;
         String origDesc = "Пробежать 30 минут";
         String origName = "Сделать зарядку";
@@ -78,8 +78,9 @@ public class InMemoryTaskManagerTest {
         TaskStatus foundStatus = foundTask.getStatus();
         Assertions.assertTrue(origName.equals(foundName) & origDesc.equals(foundDesc) & origStatus.equals(foundStatus));
     }
+
     @Test
-    void checkManualAngGeneratedTaskIdsNotConflict(){
+    void checkManualAngGeneratedTaskIdsNotConflict() {
         int manualId = 1;
         Task task1 = new Task(
                 "Пробежать 30 минут",
@@ -89,14 +90,14 @@ public class InMemoryTaskManagerTest {
         );
         inMemoryTaskManager.createTask(task1);
         inMemoryTaskManager.createTask(
-            new Task(
-                "Сходить в магазн",
-                "Купить: хлеб, молоко, шоколадку",
-                inMemoryTaskManager.createTaskId(),
-                TaskStatus.NEW
-            )
+                new Task(
+                        "Сходить в магазн",
+                        "Купить: хлеб, молоко, шоколадку",
+                        inMemoryTaskManager.createTaskId(),
+                        TaskStatus.NEW
+                )
         );
         int taskCnt = inMemoryTaskManager.getTasks().size();
-        Assertions.assertEquals(taskCnt,2);
+        Assertions.assertEquals(taskCnt, 2);
     }
 }

@@ -6,11 +6,12 @@ import org.junit.jupiter.api.Test;
 
 public class ManagersTest {
     @Test
-    void checkHistoryManagerIsReady(){
+    void checkHistoryManagerIsReady() {
         Assertions.assertInstanceOf(InMemoryHistoryManager.class, Managers.getDefaultHistory());
     }
+
     @Test
-    void checkDefaultManagerIsReady(){
+    void checkDefaultManagerIsReady() {
         Assertions.assertInstanceOf(InMemoryTaskManager.class, Managers.getDefault());
     }
 

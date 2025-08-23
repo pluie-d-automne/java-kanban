@@ -5,7 +5,7 @@ import task.TaskStatus;
 
 public class TaskTest {
     @Test
-    void checkTaskEqualsById(){
+    void checkTaskEqualsById() {
         Task task1 = new Task(
                 "Купить хлеб",
                 "-",

@@ -24,8 +24,9 @@ class SubtaskTest {
         );
         Assertions.assertEquals(task1, task2);
     }
+
     @Test
-    void cantSetSubtaskItsOwnEpic(){
+    void cantSetSubtaskItsOwnEpic() {
         Subtask subtask = new Subtask(
                 "Сабтаск 1",
                 "-",
