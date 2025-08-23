@@ -1,11 +1,10 @@
 import manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Task;
 import task.TaskStatus;
 
-public class HistoryManagerTest {
+public class InMemoryHistoryManagerTest {
     InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
     @Test

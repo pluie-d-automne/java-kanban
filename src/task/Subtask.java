@@ -9,7 +9,7 @@ public class Subtask extends Task{
     }
 
     public void setEpicId(Integer epicId) {
-        if (! epicId.equals(this.getId())) {
+        if (epicId == null || ! epicId.equals(this.getId())) {
             this.epicId = epicId;
         }
     }
