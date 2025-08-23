@@ -150,39 +150,44 @@ public class InMemoryTaskManager implements TaskManager {
                     addSubtaskToEpic(epic, subtask);
                 }
             }
-            default -> tasks.put(taskId, task);
+            case "Task" -> tasks.put(taskId, task);
+            default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
         }
         return taskId;
     }
 
     @Override
     public int updateTask(int taskId, Task newTask) {
-        String newTaskType = newTask.getClass().getSimpleName();
-        if (newTaskType.equals("Epic")) {
-            if (epicTasks.containsKey(taskId)) {
-                epicTasks.put(taskId, (Epic) newTask);
-            } else {
-                System.out.println("Эпика с таким taskId не существует");
-            }
-        } else if (newTaskType.equals("Subtask")) {
-            if (subTasks.containsKey(taskId)) {
-                Subtask subtask = (Subtask) newTask;
-                subTasks.put(taskId, subtask);
-                Integer epicId = subtask.getEpicId();
-                if (epicId != null) {
-                    Epic epic = epicTasks.get(epicId);
-                    addSubtaskToEpic(epic, subtask);
-                    calculateEpicStatus(epicId);
+        switch(newTask.getClass().getSimpleName()) {
+            case "Epic" -> {
+                if (epicTasks.containsKey(taskId)) {
+                    epicTasks.put(taskId, (Epic) newTask);
+                } else {
+                    System.out.println("Эпика с таким taskId не существует");
                 }
-            } else {
-                System.out.println("Подзадачи с таким taskId не существует");
             }
-        } else {
-            if (tasks.containsKey(taskId)) {
-                tasks.put(taskId, newTask);
-            } else {
-                System.out.println("Задачи с таким taskId не существует");
+            case "Subtask" -> {
+                if (subTasks.containsKey(taskId)) {
+                    Subtask subtask = (Subtask) newTask;
+                    subTasks.put(taskId, subtask);
+                    Integer epicId = subtask.getEpicId();
+                    if (epicId != null) {
+                        Epic epic = epicTasks.get(epicId);
+                        addSubtaskToEpic(epic, subtask);
+                        calculateEpicStatus(epicId);
+                    }
+                } else {
+                    System.out.println("Подзадачи с таким taskId не существует");
+                }
             }
+            case "Task" -> {
+                if (tasks.containsKey(taskId)) {
+                    tasks.put(taskId, newTask);
+                } else {
+                    System.out.println("Задачи с таким taskId не существует");
+                }
+            }
+            default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
         }
         return taskId;
     }
@@ -207,6 +212,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (Task subtask : subtasks) {
             status = subtask.getStatus();
+
             if (!taskStatuses.contains(status)) {
                 taskStatuses.add(status);
             }
