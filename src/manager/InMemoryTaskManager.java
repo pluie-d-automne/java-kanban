@@ -136,9 +136,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         int taskId = task.getId();
+
         if (taskId > taskCounter) {
             taskCounter = taskId;
         }
+
         switch (task.getClass().getSimpleName()) {
             case "Epic" -> epicTasks.put(taskId, (Epic) task);
             case "Subtask" -> {
@@ -196,9 +198,11 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Subtask> getEpicSubtasks(int epicId) {
         List<Subtask> epicSubtasks = new ArrayList<>();
         Epic epic = epicTasks.get(epicId);
+
         for (Task task : epic.getSubtasks()) {
             epicSubtasks.add((Subtask) task);
         }
+
         return epicSubtasks;
     }
 

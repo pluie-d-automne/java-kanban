@@ -8,7 +8,7 @@ public class InMemoryHistoryManagerTest {
     InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
     @Test
-    void checkTaskOldVersionSaved() {
+    public void checkTaskOldVersionSaved() {
         Task task = new Task(
                 "Сделать зарядку",
                 "Пробежать 30 минут",

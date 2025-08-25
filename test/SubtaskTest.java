@@ -5,9 +5,9 @@ import task.Task;
 import task.TaskStatus;
 
 
-class SubtaskTest {
+public class SubtaskTest {
     @Test
-    void checkEpicEqualsById() {
+    public void checkEpicEqualsById() {
         Subtask task1 = new Subtask(
                 "Сабтаск 1",
                 "-",
@@ -26,7 +26,7 @@ class SubtaskTest {
     }
 
     @Test
-    void cantSetSubtaskItsOwnEpic() {
+    public void cantSetSubtaskItsOwnEpic() {
         Subtask subtask = new Subtask(
                 "Сабтаск 1",
                 "-",

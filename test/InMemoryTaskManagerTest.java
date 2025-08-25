@@ -11,13 +11,13 @@ public class InMemoryTaskManagerTest {
     InMemoryTaskManager inMemoryTaskManager;
 
     @BeforeEach
-    void beforeEach() {
+    public void beforeEach() {
         inMemoryTaskManager = new InMemoryTaskManager();
     }
 
 
     @Test
-    void checkTaskManagerAddsTasks() {
+    public void checkTaskManagerAddsTasks() {
         int id = 1;
         Task newTask = new Task(
                 "Сделать зарядку",
@@ -31,7 +31,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkTaskManagerAddsEpics() {
+    public void checkTaskManagerAddsEpics() {
         int id = 1;
         Epic newEpic = new Epic(
                 "Спланировать отпуск",
@@ -45,7 +45,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkTaskManagerAddsSubtasks() {
+    public void checkTaskManagerAddsSubtasks() {
         int id = 1;
         Subtask newSubtask = new Subtask(
                 "Спланировать отпуск",
@@ -60,7 +60,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkTaskAddedUnchanged() {
+    public void checkTaskAddedUnchanged() {
         int id = 1;
         String origDesc = "Пробежать 30 минут";
         String origName = "Сделать зарядку";
@@ -80,7 +80,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkManualAngGeneratedTaskIdsNotConflict() {
+    public void checkManualAngGeneratedTaskIdsNotConflict() {
         int manualId = 1;
         Task task1 = new Task(
                 "Пробежать 30 минут",
@@ -98,6 +98,6 @@ public class InMemoryTaskManagerTest {
                 )
         );
         int taskCnt = inMemoryTaskManager.getTasks().size();
-        Assertions.assertEquals(taskCnt, 2);
+        Assertions.assertEquals(2, taskCnt);
     }
 }

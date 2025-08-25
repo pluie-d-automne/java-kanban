@@ -7,9 +7,9 @@ import task.TaskStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-class EpicTest {
+public class EpicTest {
     @Test
-    void checkEpicEqualsById(){
+    public void checkEpicEqualsById(){
         Epic task1 = new Epic(
                 "Эпик 1",
                 "-",
@@ -26,7 +26,7 @@ class EpicTest {
     }
 
     @Test
-    void cantAddEpicAsItsOwnSubtask() {
+    public void cantAddEpicAsItsOwnSubtask() {
         Epic epic = new Epic(
                 "Собраться в отпуск",
                 "Спланировать и подготовить всё, что нужно для хорошего отпуска",
@@ -37,12 +37,14 @@ class EpicTest {
         epic.setSubtasks(subtasks);
         List<Task> addedSubtasks = epic.getSubtasks();
         boolean result = false;
+
         for (Task task : addedSubtasks) {
             if (task.getId() == epic.getId()) {
                 result = true;
                 break;
             }
         }
+
         Assertions.assertFalse(result);
     }
 }
