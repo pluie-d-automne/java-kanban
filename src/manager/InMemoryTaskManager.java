@@ -119,7 +119,9 @@ public class InMemoryTaskManager implements TaskManager {
             subTasks.remove(id);
         } else {
             System.out.println("Задачи с таким id не существует");
+            return -1;
         }
+        historyManager.remove(id);
         return id;
     }
 
