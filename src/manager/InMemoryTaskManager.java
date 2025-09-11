@@ -162,7 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateTask(int taskId, Task newTask) {
-        switch(newTask.getClass().getSimpleName()) {
+        switch (newTask.getClass().getSimpleName()) {
             case "Epic" -> {
                 if (epicTasks.containsKey(taskId)) {
                     epicTasks.put(taskId, (Epic) newTask);
