@@ -8,6 +8,8 @@ import task.Subtask;
 import task.Task;
 import task.TaskStatus;
 
+import java.util.List;
+
 public class InMemoryTaskManagerTest {
     InMemoryTaskManager inMemoryTaskManager;
 
@@ -101,4 +103,45 @@ public class InMemoryTaskManagerTest {
         int taskCnt = inMemoryTaskManager.getTasks().size();
         Assertions.assertEquals(2, taskCnt);
     }
-}
+
+    @Test
+    public void checkDeletedSubtasksNotInEpic() {
+        int epic_id = inMemoryTaskManager.createTask(
+                new Epic(
+                        "Собраться в отпуск",
+                        "Спланировать и подготовить всё, что нужно для хорошего отпуска",
+                        inMemoryTaskManager.createTaskId(),
+                        TaskStatus.NEW)
+        );
+
+        int subtask_1_id = inMemoryTaskManager.createTask(
+                new Subtask(
+                        "Купить билеты на самолёт",
+                        "Выбрать оптимальный рейс и купить билеты",
+                        inMemoryTaskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        int subtask_2_id = inMemoryTaskManager.createTask(
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        inMemoryTaskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        Task subtask_1 = inMemoryTaskManager.getSubtaskById(subtask_1_id);
+        Task subtask_2 = inMemoryTaskManager.getSubtaskById(subtask_2_id);
+        inMemoryTaskManager.dropTaskById(subtask_1_id);
+        Epic epic = inMemoryTaskManager.getEpicById(epic_id);
+        List<Task> subtasks = epic.getSubtasks();
+
+        Assertions.assertEquals(1, subtasks.size());
+        Assertions.assertFalse(subtasks.contains(subtask_1));
+        Assertions.assertTrue(subtasks.contains(subtask_2));
+    }
+ }
