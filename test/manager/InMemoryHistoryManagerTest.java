@@ -62,7 +62,6 @@ public class InMemoryHistoryManagerTest {
         historyManager.add(task2);
         historyManager.add(task1);
         List<Task> resultHistory = historyManager.getHistory();
-        System.out.println(resultHistory);
         List<Task> targetHistory = new ArrayList<>(Arrays.asList(task3, task2, task1));
         boolean result = true;
         for (int i = 0; i < 3; i++) {

@@ -4,6 +4,8 @@ import task.Subtask;
 import task.Task;
 import task.TaskStatus;
 
+import java.util.SortedMap;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -60,64 +62,41 @@ public class Main {
 
         taskManager.createTask(
                 new Subtask(
-                        "Сделать дамашнее задание",
-                        "Сделать домашнее задание по текущему спринту",
+                        "Купить путеводитель",
+                        "-",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
-                        taskManager.getEpicIdByName("Освоить Java")
-                )
-        );
-        System.out.println("\nОбратимся к задачам и проверим историю:");
-        taskManager.getEpicById(3);
-        taskManager.getTaskById(1);
-        System.out.println(taskManager.getHistory());
-
-        System.out.println("\nСписок отдельных задач:");
-        System.out.println(taskManager.getTasks());
-        System.out.println("\nСписок эпиков:");
-        System.out.println(taskManager.getEpicTasks());
-        System.out.println("\nСписок подзадач:");
-        System.out.println(taskManager.getSubTasks());
-        System.out.println("\nНайдём эпик по id = 3:");
-        System.out.println(taskManager.getEpicById(3));
-        System.out.println("И выведем его подзадачи:");
-        System.out.println(taskManager.getEpicSubtasks(3));
-        System.out.println("\nОбновим статусы подзадач");
-        taskManager.updateTask(
-                7,
-                new Subtask(
-                        "Сделать дамашнее задание",
-                        "Сделать домашнее задание по текущему спринту",
-                        7,
-                        TaskStatus.DONE,
-                        taskManager.getEpicIdByName("Освоить Java")
-                )
-        );
-        taskManager.updateTask(
-                6,
-                new Subtask(
-                        "Найти жильё",
-                        "Выбрать подходящий отель и забронировать проживание",
-                        6,
-                        TaskStatus.IN_PROGRESS,
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
-        System.out.println("\nСписок эпиков:");
-        System.out.println(taskManager.getEpicTasks());
-        System.out.println("\nСписок подзадач:");
-        System.out.println(taskManager.getSubTasks());
+        System.out.println("\nЗапросим задачи в разном порядке:");
+        taskManager.getEpicById(3);
+        taskManager.getEpicById(4);
+        taskManager.getTaskById(2);
+        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
 
-        System.out.println("\nУдалим задачу, подзадачу и эпик");
-        taskManager.dropTaskById(2);
-        taskManager.dropTaskById(4);
-        taskManager.dropTaskById(6);
+        taskManager.getEpicById(4);
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
 
-        System.out.println("\nСписок отдельных задач:");
-        System.out.println(taskManager.getTasks());
-        System.out.println("\nСписок эпиков:");
-        System.out.println(taskManager.getEpicTasks());
-        System.out.println("\nСписок подзадач:");
-        System.out.println(taskManager.getSubTasks());
+        taskManager.getSubtaskById(5);
+        taskManager.getSubtaskById(6);
+        taskManager.getSubtaskById(7);
+        taskManager.getSubtaskById(5);
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
+
+        System.out.println("Удалим задачу 5");
+        taskManager.dropTaskById(5);
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
+
+        System.out.println("Удалим эпик 3 - с подзадачами");
+        taskManager.dropTaskById(3);
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
     }
 }
