@@ -3,7 +3,7 @@ package task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private List<Task> subtasks = new ArrayList<>();
 
     public Epic(String name, String description, int id, TaskStatus status) {

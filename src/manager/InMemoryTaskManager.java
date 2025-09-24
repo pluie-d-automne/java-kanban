@@ -101,7 +101,9 @@ public class InMemoryTaskManager implements TaskManager {
             List<Subtask> epicSubtasks = getEpicSubtasks(id);
 
             for (Subtask subtask : epicSubtasks) {
-                subtask.setEpicId(null);
+                int subtaskId = subtask.getId();
+                subTasks.remove(subtaskId);
+                historyManager.remove(subtaskId);
             }
 
             epicTasks.remove(id);
@@ -119,7 +121,9 @@ public class InMemoryTaskManager implements TaskManager {
             subTasks.remove(id);
         } else {
             System.out.println("Задачи с таким id не существует");
+            return -1;
         }
+        historyManager.remove(id);
         return id;
     }
 
@@ -160,7 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateTask(int taskId, Task newTask) {
-        switch(newTask.getClass().getSimpleName()) {
+        switch (newTask.getClass().getSimpleName()) {
             case "Epic" -> {
                 if (epicTasks.containsKey(taskId)) {
                     epicTasks.put(taskId, (Epic) newTask);
