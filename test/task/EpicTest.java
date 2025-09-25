@@ -13,13 +13,15 @@ public class EpicTest {
                 "Эпик 1",
                 "-",
                 1,
-                TaskStatus.IN_PROGRESS
+                TaskStatus.IN_PROGRESS,
+                TaskType.EPIC
         );
         Task task2 = new Epic(
                 "Эпик 32",
                 "123",
                 1,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.EPIC
         );
         Assertions.assertEquals(task1, task2);
     }
@@ -28,9 +30,10 @@ public class EpicTest {
     public void cantAddEpicAsItsOwnSubtask() {
         Epic epic = new Epic(
                 "Собраться в отпуск",
-                "Спланировать и подготовить всё, что нужно для хорошего отпуска",
+                "Спланировать и подготовить всё что нужно для хорошего отпуска",
                 1,
-                TaskStatus.NEW);
+                TaskStatus.NEW,
+                TaskType.EPIC);
         List<Task> subtasks = new ArrayList<>();
         subtasks.add(epic);
         epic.setSubtasks(subtasks);

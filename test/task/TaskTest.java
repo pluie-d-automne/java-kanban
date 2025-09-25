@@ -10,13 +10,15 @@ public class TaskTest {
                 "Купить хлеб",
                 "-",
                 1,
-                TaskStatus.IN_PROGRESS
+                TaskStatus.IN_PROGRESS,
+                TaskType.TASK
         );
         Task task2 = new Task(
                 "Купить молоко",
                 "123",
                 1,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         Assertions.assertEquals(task1, task2);
     }

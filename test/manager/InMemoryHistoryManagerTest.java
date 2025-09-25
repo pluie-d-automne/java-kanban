@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Task;
 import task.TaskStatus;
+import task.TaskType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,14 +25,16 @@ public class InMemoryHistoryManagerTest {
                 "Сделать зарядку",
                 "Пробежать 30 минут",
                 1,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         historyManager.add(task);
         task = new Task(
                 "Испечь пирог",
                 "-",
                 2,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         Assertions.assertNotEquals(historyManager.getHistory().getFirst(), task);
     }
@@ -42,19 +45,22 @@ public class InMemoryHistoryManagerTest {
                 "Сделать зарядку",
                 "Пробежать 30 минут",
                 1,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         Task task2 = new Task(
                 "Приготовить завтрак",
                 "Овсянка",
                 2,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         Task task3 = new Task(
                 "Позаниматься на практикуме",
                 "Пройти 1 тему",
                 3,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         historyManager.add(task1);
         historyManager.add(task2);

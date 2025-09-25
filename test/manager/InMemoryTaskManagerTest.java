@@ -3,10 +3,7 @@ package manager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import task.Epic;
-import task.Subtask;
-import task.Task;
-import task.TaskStatus;
+import task.*;
 
 import java.util.List;
 
@@ -26,7 +23,8 @@ public class InMemoryTaskManagerTest {
                 "Сделать зарядку",
                 "Пробежать 30 минут",
                 id,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         inMemoryTaskManager.createTask(newTask);
         Task foundTask = inMemoryTaskManager.getTaskById(id);
@@ -40,7 +38,8 @@ public class InMemoryTaskManagerTest {
                 "Спланировать отпуск",
                 "Много разных дел",
                 id,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.EPIC
         );
         inMemoryTaskManager.createTask(newEpic);
         Epic foundEpic = (Epic) inMemoryTaskManager.getEpicById(id);
@@ -55,6 +54,7 @@ public class InMemoryTaskManagerTest {
                 "Много разных дел",
                 id,
                 TaskStatus.NEW,
+                TaskType.SUBTASK,
                 null
         );
         inMemoryTaskManager.createTask(newSubtask);
@@ -72,7 +72,8 @@ public class InMemoryTaskManagerTest {
                 origName,
                 origDesc,
                 id,
-                origStatus
+                origStatus,
+                TaskType.TASK
         );
         inMemoryTaskManager.createTask(newTask);
         Task foundTask = inMemoryTaskManager.getTaskById(id);
@@ -89,15 +90,17 @@ public class InMemoryTaskManagerTest {
                 "Пробежать 30 минут",
                 "Сделать зарядку",
                 manualId,
-                TaskStatus.NEW
+                TaskStatus.NEW,
+                TaskType.TASK
         );
         inMemoryTaskManager.createTask(task1);
         inMemoryTaskManager.createTask(
                 new Task(
                         "Сходить в магазн",
-                        "Купить: хлеб, молоко, шоколадку",
+                        "Купить хлеб молоко шоколадку",
                         inMemoryTaskManager.createTaskId(),
-                        TaskStatus.NEW
+                        TaskStatus.NEW,
+                        TaskType.TASK
                 )
         );
         int taskCnt = inMemoryTaskManager.getTasks().size();
@@ -111,7 +114,8 @@ public class InMemoryTaskManagerTest {
                         "Собраться в отпуск",
                         "Спланировать и подготовить всё, что нужно для хорошего отпуска",
                         inMemoryTaskManager.createTaskId(),
-                        TaskStatus.NEW)
+                        TaskStatus.NEW,
+                        TaskType.EPIC)
         );
 
         int subtask1Id = inMemoryTaskManager.createTask(
@@ -120,6 +124,7 @@ public class InMemoryTaskManagerTest {
                         "Выбрать оптимальный рейс и купить билеты",
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
+                        TaskType.SUBTASK,
                         inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -130,6 +135,7 @@ public class InMemoryTaskManagerTest {
                         "Выбрать подходящий отель и забронировать проживание",
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
+                        TaskType.SUBTASK,
                         inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );

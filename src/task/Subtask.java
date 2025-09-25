@@ -3,8 +3,8 @@ package task;
 public class Subtask extends Task {
     private Integer epicId;
 
-    public Subtask(String name, String description, int id, TaskStatus status, Integer epicId) {
-        super(name, description, id, status);
+    public Subtask(String name, String description, int id, TaskStatus status, TaskType taskType, Integer epicId) {
+        super(name, description, id, status, taskType);
         this.epicId = epicId;
     }
 
@@ -16,6 +16,12 @@ public class Subtask extends Task {
 
     public Integer getEpicId() {
         return epicId;
+    }
+
+    @Override
+    public String toString() {
+        String csvString = super.toString();
+        return csvString + epicId;
     }
 
 }
