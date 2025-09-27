@@ -10,10 +10,11 @@ import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final String filePath;
+    public static final String CSV_HEAD = "id,type,name,status,description,epicId\n";
 
     public FileBackedTaskManager(String filePath) {
         this.filePath = filePath;
-
+        save();
     }
 
     static FileBackedTaskManager loadFromFile(File file) {
@@ -34,7 +35,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     private void save() {
         try {
             Writer fileWriter = new FileWriter(filePath, false);
-            fileWriter.write("id,type,name,status,description,epicId\n");
+            fileWriter.write(CSV_HEAD);
 
             for (int taskId: tasks.keySet()) {
                 Task task = tasks.get(taskId);

@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class FileBackedTaskManagerTest {
@@ -21,6 +21,19 @@ public class FileBackedTaskManagerTest {
         fileBackedTaskManager = new FileBackedTaskManager(file.toString());
     }
 
+    @Test
+    public void checkTaskManagerCreatesAndLoadsEmptyFile() throws IOException {
+        String fileData = Files.readString(file.toPath());
+        Assertions.assertEquals(FileBackedTaskManager.CSV_HEAD, fileData);
+
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);
+        List<Task> tasks = loadedManager.getTasks();
+        List<Epic> epics = loadedManager.getEpicTasks();
+        List<Subtask> subtasks = loadedManager.getSubTasks();
+        Assertions.assertEquals(0,tasks.size());
+        Assertions.assertEquals(0,epics.size());
+        Assertions.assertEquals(0,subtasks.size());
+    }
 
     @Test
     public void checkTaskManagerAddsTasks() {
