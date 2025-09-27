@@ -2,15 +2,33 @@ package manager;
 
 import task.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final String filePath;
 
     public FileBackedTaskManager(String filePath) {
         this.filePath = filePath;
+
+    }
+
+    static FileBackedTaskManager loadFromFile(File file) {
+        String fileData;
+        try {
+            fileData = Files.readString(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String[] allTasks = fileData.split("\n");
+        FileBackedTaskManager manager = new FileBackedTaskManager(file.toPath().toString());
+        for (int i = 1; i < allTasks.length; i++) {
+            manager.createTask(manager.fromString(allTasks[i]));
+        }
+        return manager;
     }
 
     private void save() {
