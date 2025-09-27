@@ -1,8 +1,6 @@
 package manager;
 
-import task.Epic;
-import task.Subtask;
-import task.Task;
+import task.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final String filePath;
@@ -13,6 +11,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private void save() {
 
+    }
+
+    private Task fromString(String value) {
+        String[] taskData = value.split(",");
+        int id = Integer.parseInt(taskData[0]);
+        String name = taskData[2];
+
+        TaskStatus status = switch (taskData[3]) {
+            case "DONE" -> TaskStatus.DONE;
+            case "NEW" -> TaskStatus.NEW;
+            default -> TaskStatus.IN_PROGRESS;
+        };
+
+        String description = taskData[4];
+        int epicId = Integer.parseInt(taskData[5]);
+
+        switch (taskData[1]) {
+            case "EPIC" -> {return new Epic(name, description, id, status, TaskType.EPIC);}
+            case "SUBTASK" -> {return new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);}
+            default -> {return new Task(name, description, id, status, TaskType.TASK);}
+        }
     }
 
     @Override
