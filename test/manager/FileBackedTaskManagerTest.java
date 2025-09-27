@@ -36,6 +36,52 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
+    public void checkTaskManagerCreatesAndLoadsFileWithTasks() throws IOException {
+        Task newTask = new Task(
+                "Сделать зарядку",
+                "Пробежать 30 минут",
+                1,
+                TaskStatus.NEW,
+                TaskType.TASK
+        );
+        Epic newEpic = new Epic(
+                "Спланировать отпуск",
+                "Много разных дел",
+                2,
+                TaskStatus.NEW,
+                TaskType.EPIC
+        );
+        Subtask newSubtask = new Subtask(
+                "Купит билеты",
+                "-",
+                3,
+                TaskStatus.NEW,
+                TaskType.SUBTASK,
+                2
+        );
+        fileBackedTaskManager.createTask(newTask);
+        fileBackedTaskManager.createTask(newEpic);
+        fileBackedTaskManager.createTask(newSubtask);
+        String testString = String.format(
+                "%s%s\n%s\n%s\n",
+                FileBackedTaskManager.CSV_HEAD,
+                newTask,
+                newEpic,
+                newSubtask
+        );
+        String fileData = Files.readString(file.toPath());
+        Assertions.assertEquals(testString, fileData);
+
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);
+        Task task = loadedManager.getTaskById(1);
+        Epic epic = loadedManager.getEpicById(2);
+        Subtask subtask = loadedManager.getSubtaskById(3);
+        Assertions.assertEquals(newTask, task);
+        Assertions.assertEquals(newEpic, epic);
+        Assertions.assertEquals(newSubtask, subtask);
+    }
+
+    @Test
     public void checkTaskManagerAddsTasks() {
         int id = 1;
         Task newTask = new Task(

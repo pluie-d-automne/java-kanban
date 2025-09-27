@@ -72,7 +72,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         };
 
         String description = taskData[4];
-        int epicId = Integer.parseInt(taskData[5]);
+        Integer epicId = null;
+        if (taskData.length==6) {
+            epicId = Integer.parseInt(taskData[5]);
+        }
 
         switch (taskData[1]) {
             case "EPIC" -> {return new Epic(name, description, id, status, TaskType.EPIC);}
