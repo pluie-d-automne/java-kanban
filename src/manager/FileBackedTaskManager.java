@@ -39,17 +39,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
             for (int taskId: tasks.keySet()) {
                 Task task = tasks.get(taskId);
-                fileWriter.write(task.toString()+"\n");
+                fileWriter.write(task.toString() + "\n");
             }
 
             for (int taskId: epicTasks.keySet()) {
                 Epic task = epicTasks.get(taskId);
-                fileWriter.write(task.toString()+"\n");
+                fileWriter.write(task.toString() + "\n");
             }
 
             for (int taskId: subTasks.keySet()) {
                 Subtask task = subTasks.get(taskId);
-                fileWriter.write(task.toString()+"\n");
+                fileWriter.write(task.toString() + "\n");
             }
 
             fileWriter.close();
@@ -73,14 +73,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
         String description = taskData[4];
         Integer epicId = null;
-        if (taskData.length==6) {
+        if (taskData.length == 6) {
             epicId = Integer.parseInt(taskData[5]);
         }
 
         switch (taskData[1]) {
-            case "EPIC" -> {return new Epic(name, description, id, status, TaskType.EPIC);}
-            case "SUBTASK" -> {return new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);}
-            default -> {return new Task(name, description, id, status, TaskType.TASK);}
+            case "EPIC" -> {
+                return new Epic(name, description, id, status, TaskType.EPIC);
+            }
+            case "SUBTASK" -> {
+                return new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);
+            }
+            default -> {
+                return new Task(name, description, id, status, TaskType.TASK);
+            }
         }
     }
 
