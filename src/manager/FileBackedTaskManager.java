@@ -2,6 +2,10 @@ package manager;
 
 import task.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final String filePath;
 
@@ -10,6 +14,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
+        try {
+            Writer fileWriter = new FileWriter(filePath, false);
+            fileWriter.write("id,type,name,status,description,epicId\n");
+
+            for (int taskId: tasks.keySet()) {
+                Task task = tasks.get(taskId);
+                fileWriter.write(task.toString()+"\n");
+            }
+
+            for (int taskId: epicTasks.keySet()) {
+                Epic task = epicTasks.get(taskId);
+                fileWriter.write(task.toString()+"\n");
+            }
+
+            for (int taskId: subTasks.keySet()) {
+                Subtask task = subTasks.get(taskId);
+                fileWriter.write(task.toString()+"\n");
+            }
+
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new ManagerSaveException("Проблемы с записью в файл");
+        }
+
 
     }
 
