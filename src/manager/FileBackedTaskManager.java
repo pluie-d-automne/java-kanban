@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final String filePath;
     public static final String CSV_HEAD = "id,type,name,status,description,epicId\n";
 
@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         save();
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         String fileData;
         try {
             fileData = Files.readString(file.toPath());
