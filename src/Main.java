@@ -1,8 +1,5 @@
 import manager.InMemoryTaskManager;
-import task.Epic;
-import task.Subtask;
-import task.Task;
-import task.TaskStatus;
+import task.*;
 
 public class Main {
 
@@ -14,30 +11,34 @@ public class Main {
                         "Сделать зарядку",
                         "Пробежать 30 минут",
                         taskManager.createTaskId(),
-                        TaskStatus.NEW
+                        TaskStatus.NEW,
+                        TaskType.TASK
                 )
         );
         taskManager.createTask(
                 new Task(
                         "Сходить в магазн",
-                        "Купить: хлеб, молоко, шоколадку",
+                        "Купить хлеб молоко шоколадку",
                         taskManager.createTaskId(),
-                        TaskStatus.NEW
+                        TaskStatus.NEW,
+                        TaskType.TASK
                 )
         );
         taskManager.createTask(
                 new Epic(
                         "Собраться в отпуск",
-                        "Спланировать и подготовить всё, что нужно для хорошего отпуска",
+                        "Спланировать и подготовить всё что нужно для хорошего отпуска",
                         taskManager.createTaskId(),
-                        TaskStatus.NEW)
+                        TaskStatus.NEW,
+                        TaskType.EPIC)
         );
         taskManager.createTask(
                 new Epic(
                         "Освоить Java",
                         "Научиться программировать на языке java",
                         taskManager.createTaskId(),
-                        TaskStatus.NEW)
+                        TaskStatus.NEW,
+                        TaskType.EPIC)
         );
         taskManager.createTask(
                 new Subtask(
@@ -45,6 +46,7 @@ public class Main {
                         "Выбрать оптимальный рейс и купить билеты",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
+                        TaskType.SUBTASK,
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -54,6 +56,7 @@ public class Main {
                         "Выбрать подходящий отель и забронировать проживание",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
+                        TaskType.SUBTASK,
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -64,6 +67,7 @@ public class Main {
                         "-",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
+                        TaskType.SUBTASK,
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );

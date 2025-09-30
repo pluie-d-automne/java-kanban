@@ -12,6 +12,7 @@ public class SubtaskTest {
                 "-",
                 1,
                 TaskStatus.IN_PROGRESS,
+                TaskType.SUBTASK,
                 0
         );
         Task task2 = new Subtask(
@@ -19,6 +20,7 @@ public class SubtaskTest {
                 "123",
                 1,
                 TaskStatus.NEW,
+                TaskType.SUBTASK,
                 3
         );
         Assertions.assertEquals(task1, task2);
@@ -31,6 +33,7 @@ public class SubtaskTest {
                 "-",
                 1,
                 TaskStatus.IN_PROGRESS,
+                TaskType.SUBTASK,
                 null
         );
         subtask.setEpicId(1);
