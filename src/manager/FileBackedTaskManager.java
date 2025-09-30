@@ -77,17 +77,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             epicId = Integer.parseInt(taskData[5]);
         }
 
-        switch (taskData[1]) {
-            case "EPIC" -> {
-                return new Epic(name, description, id, status, TaskType.EPIC);
-            }
-            case "SUBTASK" -> {
-                return new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);
-            }
-            default -> {
-                return new Task(name, description, id, status, TaskType.TASK);
-            }
-        }
+        return switch (taskData[1]) {
+            case "EPIC" ->  new Epic(name, description, id, status, TaskType.EPIC);
+            case "SUBTASK" ->  new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);
+            default -> new Task(name, description, id, status, TaskType.TASK);
+        };
     }
 
     @Override
