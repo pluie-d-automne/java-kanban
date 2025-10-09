@@ -7,6 +7,7 @@ import task.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManagerTest {
@@ -42,21 +43,27 @@ public class FileBackedTaskManagerTest {
                 "Пробежать 30 минут",
                 1,
                 TaskStatus.NEW,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:10:00")
         );
         Epic newEpic = new Epic(
                 "Спланировать отпуск",
                 "Много разных дел",
                 2,
                 TaskStatus.NEW,
-                TaskType.EPIC
+                TaskType.EPIC,
+                0,
+                LocalDateTime.parse("1970-01-01T00:00:00")
         );
         Subtask newSubtask = new Subtask(
-                "Купит билеты",
+                "Купить билеты",
                 "-",
                 3,
                 TaskStatus.NEW,
                 TaskType.SUBTASK,
+                30,
+                LocalDateTime.parse("2025-10-01T12:00:00"),
                 2
         );
         fileBackedTaskManager.createTask(newTask);
@@ -89,7 +96,9 @@ public class FileBackedTaskManagerTest {
                 "Пробежать 30 минут",
                 id,
                 TaskStatus.NEW,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T12:00:00")
         );
         fileBackedTaskManager.createTask(newTask);
         Task foundTask = fileBackedTaskManager.getTaskById(id);
@@ -104,10 +113,12 @@ public class FileBackedTaskManagerTest {
                 "Много разных дел",
                 id,
                 TaskStatus.NEW,
-                TaskType.EPIC
+                TaskType.EPIC,
+                0,
+                LocalDateTime.parse("1970-01-01T00:00:00")
         );
         fileBackedTaskManager.createTask(newEpic);
-        Epic foundEpic = (Epic) fileBackedTaskManager.getEpicById(id);
+        Epic foundEpic = fileBackedTaskManager.getEpicById(id);
         Assertions.assertEquals(foundEpic, newEpic);
     }
 
@@ -115,15 +126,17 @@ public class FileBackedTaskManagerTest {
     public void checkTaskManagerAddsSubtasks() {
         int id = 1;
         Subtask newSubtask = new Subtask(
-                "Спланировать отпуск",
-                "Много разных дел",
+                "Купить билеты",
+                "Выбрать и купить билеты",
                 id,
                 TaskStatus.NEW,
                 TaskType.SUBTASK,
+                30,
+                LocalDateTime.parse("2025-10-01T12:00:00"),
                 null
         );
         fileBackedTaskManager.createTask(newSubtask);
-        Subtask foundSubtask = (Subtask) fileBackedTaskManager.getSubtaskById(id);
+        Subtask foundSubtask = fileBackedTaskManager.getSubtaskById(id);
         Assertions.assertEquals(foundSubtask, newSubtask);
     }
 
@@ -133,19 +146,31 @@ public class FileBackedTaskManagerTest {
         String origDesc = "Пробежать 30 минут";
         String origName = "Сделать зарядку";
         TaskStatus origStatus = TaskStatus.NEW;
+        long origDuration = 30;
+        LocalDateTime origStartTime = LocalDateTime.parse("2025-10-01T07:00:00");
         Task newTask = new Task(
                 origName,
                 origDesc,
                 id,
                 origStatus,
-                TaskType.TASK
+                TaskType.TASK,
+                origDuration,
+                origStartTime
         );
         fileBackedTaskManager.createTask(newTask);
         Task foundTask = fileBackedTaskManager.getTaskById(id);
         String foundDesc = foundTask.getDescription();
         String foundName = foundTask.getName();
         TaskStatus foundStatus = foundTask.getStatus();
-        Assertions.assertTrue(origName.equals(foundName) & origDesc.equals(foundDesc) & origStatus.equals(foundStatus));
+        long foundDuration = foundTask.getDuration().toMinutes();
+        LocalDateTime foundStartTime = foundTask.getStartTime();
+        Assertions.assertTrue(
+                origName.equals(foundName)
+                        & origDesc.equals(foundDesc)
+                        & origStatus.equals(foundStatus)
+                        & origDuration==foundDuration
+                        & origStartTime.equals(foundStartTime)
+        );
     }
 
     @Test
@@ -156,7 +181,9 @@ public class FileBackedTaskManagerTest {
                 "Сделать зарядку",
                 manualId,
                 TaskStatus.NEW,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:00:00")
         );
         fileBackedTaskManager.createTask(task1);
         fileBackedTaskManager.createTask(
@@ -165,7 +192,9 @@ public class FileBackedTaskManagerTest {
                         "Купить хлеб молоко шоколадку",
                         fileBackedTaskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.TASK
+                        TaskType.TASK,
+                        25,
+                        LocalDateTime.parse("2025-10-01T12:00:00")
                 )
         );
         int taskCnt = fileBackedTaskManager.getTasks().size();
@@ -180,7 +209,10 @@ public class FileBackedTaskManagerTest {
                         "Спланировать и подготовить всё, что нужно для хорошего отпуска",
                         fileBackedTaskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.EPIC)
+                        TaskType.EPIC,
+                        0,
+                        LocalDateTime.parse("1970-01-01T00:00:00")
+                )
         );
 
         int subtask1Id = fileBackedTaskManager.createTask(
@@ -190,6 +222,8 @@ public class FileBackedTaskManagerTest {
                         fileBackedTaskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        45,
+                        LocalDateTime.parse("2025-10-01T12:00:00"),
                         fileBackedTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -201,6 +235,8 @@ public class FileBackedTaskManagerTest {
                         fileBackedTaskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-10-01T13:00:00"),
                         fileBackedTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );

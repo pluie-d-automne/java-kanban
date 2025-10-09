@@ -1,6 +1,6 @@
 import manager.InMemoryTaskManager;
 import task.*;
-
+import java.time.LocalDateTime;
 public class Main {
 
     public static void main(String[] args) {
@@ -12,7 +12,9 @@ public class Main {
                         "Пробежать 30 минут",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.TASK
+                        TaskType.TASK,
+                        15,
+                        LocalDateTime.parse("2025-10-01T07:10:00")
                 )
         );
         taskManager.createTask(
@@ -21,7 +23,9 @@ public class Main {
                         "Купить хлеб молоко шоколадку",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.TASK
+                        TaskType.TASK,
+                        30,
+                        LocalDateTime.parse("2025-10-01T10:10:00")
                 )
         );
         taskManager.createTask(
@@ -30,7 +34,9 @@ public class Main {
                         "Спланировать и подготовить всё что нужно для хорошего отпуска",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.EPIC)
+                        TaskType.EPIC,
+                        0,
+                        LocalDateTime.parse("1970-01-01T00:00:00"))
         );
         taskManager.createTask(
                 new Epic(
@@ -38,7 +44,9 @@ public class Main {
                         "Научиться программировать на языке java",
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.EPIC)
+                        TaskType.EPIC,
+                        0,
+                        LocalDateTime.parse("1970-01-01T00:00:00"))
         );
         taskManager.createTask(
                 new Subtask(
@@ -47,6 +55,8 @@ public class Main {
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        20,
+                        LocalDateTime.parse("2025-11-01T12:00:00"),
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -57,6 +67,8 @@ public class Main {
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-11-03T15:00:00"),
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -68,6 +80,8 @@ public class Main {
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        15,
+                        LocalDateTime.parse("2025-12-01T12:00:00"),
                         taskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );

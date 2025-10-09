@@ -7,10 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final String filePath;
-    public static final String CSV_HEAD = "id,type,name,status,description,epicId\n";
+    public static final String CSV_HEAD = "id,type,name,status,description,duration,startTime,epicId\n";
 
     public FileBackedTaskManager(String filePath) {
         this.filePath = filePath;
@@ -73,14 +74,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         String description = taskData[4];
         Integer epicId = null;
-        if (taskData.length == 6) {
-            epicId = Integer.parseInt(taskData[5]);
+        int duration =  Integer.parseInt(taskData[5]);
+        LocalDateTime startTime =  LocalDateTime.parse(taskData[6]);
+        if (taskData.length == 8) {
+            epicId = Integer.parseInt(taskData[7]);
         }
 
         return switch (taskData[1]) {
-            case "EPIC" ->  new Epic(name, description, id, status, TaskType.EPIC);
-            case "SUBTASK" ->  new Subtask(name, description, id, status, TaskType.SUBTASK, epicId);
-            default -> new Task(name, description, id, status, TaskType.TASK);
+            case "EPIC" ->  new Epic(name, description, id, status, TaskType.EPIC, duration, startTime);
+            case "SUBTASK" ->  new Subtask(name, description, id, status, TaskType.SUBTASK, duration, startTime, epicId);
+            default -> new Task(name, description, id, status, TaskType.TASK, duration, startTime);
         };
     }
 

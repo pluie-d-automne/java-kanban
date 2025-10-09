@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class InMemoryTaskManagerTest {
@@ -24,7 +25,9 @@ public class InMemoryTaskManagerTest {
                 "Пробежать 30 минут",
                 id,
                 TaskStatus.NEW,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:00:00")
         );
         inMemoryTaskManager.createTask(newTask);
         Task foundTask = inMemoryTaskManager.getTaskById(id);
@@ -39,10 +42,12 @@ public class InMemoryTaskManagerTest {
                 "Много разных дел",
                 id,
                 TaskStatus.NEW,
-                TaskType.EPIC
+                TaskType.EPIC,
+                0,
+                LocalDateTime.parse("1970-01-01T00:00:00")
         );
         inMemoryTaskManager.createTask(newEpic);
-        Epic foundEpic = (Epic) inMemoryTaskManager.getEpicById(id);
+        Epic foundEpic = inMemoryTaskManager.getEpicById(id);
         Assertions.assertEquals(foundEpic, newEpic);
     }
 
@@ -50,15 +55,17 @@ public class InMemoryTaskManagerTest {
     public void checkTaskManagerAddsSubtasks() {
         int id = 1;
         Subtask newSubtask = new Subtask(
-                "Спланировать отпуск",
-                "Много разных дел",
+                "Купить билеты на самолёт",
+                "Выбрать и купить билеты на самолёт",
                 id,
                 TaskStatus.NEW,
                 TaskType.SUBTASK,
+                20,
+                LocalDateTime.parse("2025-10-01T10:00:00"),
                 null
         );
         inMemoryTaskManager.createTask(newSubtask);
-        Subtask foundSubtask = (Subtask) inMemoryTaskManager.getSubtaskById(id);
+        Subtask foundSubtask = inMemoryTaskManager.getSubtaskById(id);
         Assertions.assertEquals(foundSubtask, newSubtask);
     }
 
@@ -73,7 +80,9 @@ public class InMemoryTaskManagerTest {
                 origDesc,
                 id,
                 origStatus,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:00:00")
         );
         inMemoryTaskManager.createTask(newTask);
         Task foundTask = inMemoryTaskManager.getTaskById(id);
@@ -91,16 +100,20 @@ public class InMemoryTaskManagerTest {
                 "Сделать зарядку",
                 manualId,
                 TaskStatus.NEW,
-                TaskType.TASK
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:00:00")
         );
         inMemoryTaskManager.createTask(task1);
         inMemoryTaskManager.createTask(
                 new Task(
-                        "Сходить в магазн",
+                        "Сходить в магазин",
                         "Купить хлеб молоко шоколадку",
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.TASK
+                        TaskType.TASK,
+                        45,
+                        LocalDateTime.parse("2025-10-10T07:00:00")
                 )
         );
         int taskCnt = inMemoryTaskManager.getTasks().size();
@@ -112,10 +125,13 @@ public class InMemoryTaskManagerTest {
         int epicId = inMemoryTaskManager.createTask(
                 new Epic(
                         "Собраться в отпуск",
-                        "Спланировать и подготовить всё, что нужно для хорошего отпуска",
+                        "Спланировать и подготовить всё что нужно для хорошего отпуска",
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
-                        TaskType.EPIC)
+                        TaskType.EPIC,
+                        0,
+                        LocalDateTime.parse("1970-01-01T07:00:00")
+                )
         );
 
         int subtask1Id = inMemoryTaskManager.createTask(
@@ -125,6 +141,8 @@ public class InMemoryTaskManagerTest {
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        30,
+                        LocalDateTime.parse("2025-10-01T10:00:00"),
                         inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );
@@ -136,6 +154,8 @@ public class InMemoryTaskManagerTest {
                         inMemoryTaskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-10-05T12:00:00"),
                         inMemoryTaskManager.getEpicIdByName("Собраться в отпуск")
                 )
         );

@@ -5,6 +5,8 @@ import task.Subtask;
 import task.Task;
 import task.TaskStatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -180,7 +182,6 @@ public class InMemoryTaskManager implements TaskManager {
                     if (epicId != null) {
                         Epic epic = epicTasks.get(epicId);
                         addSubtaskToEpic(epic, subtask);
-                        calculateEpicStatus(epicId);
                     }
                 } else {
                     System.out.println("Подзадачи с таким taskId не существует");
@@ -212,23 +213,47 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void addSubtaskToEpic(Epic epic, Subtask subtask) {
         List<Task> epicSubtasks = epic.getSubtasks();
+        int epicId = epic.getId();
         epicSubtasks.add(subtask);
         epic.setSubtasks(epicSubtasks);
+        calculateEpicStatus(epicId);
     }
 
     public void calculateEpicStatus(int epicId) {
         List<TaskStatus> taskStatuses = new ArrayList<>();
+        LocalDateTime endTime = null;
+        LocalDateTime startTime = null;
+        Duration duration = Duration.ofMinutes(0);
         List<Subtask> subtasks = getEpicSubtasks(epicId);
         Epic epic = epicTasks.get(epicId);
         TaskStatus status;
 
         for (Task subtask : subtasks) {
             status = subtask.getStatus();
+            LocalDateTime subtaskStartTime = subtask.getStartTime();
+            LocalDateTime subtaskEndTime = subtask.getEndTime();
+            duration = duration.plus(subtask.getDuration());
+
+            if (startTime==null) {
+                startTime = subtaskStartTime;
+                endTime = subtaskEndTime;
+            } else {
+                if (startTime.isAfter(subtaskStartTime)) {
+                    startTime = subtaskStartTime;
+                }
+                if (endTime.isBefore(subtaskEndTime)) {
+                    endTime = subtaskEndTime;
+                }
+            }
 
             if (!taskStatuses.contains(status)) {
                 taskStatuses.add(status);
             }
         }
+
+        epic.setDuration(duration);
+        epic.setStartTime(startTime);
+        epic.setEndTime(endTime);
 
         if (taskStatuses.isEmpty()) {
             epic.setStatus(TaskStatus.NEW);

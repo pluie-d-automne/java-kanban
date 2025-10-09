@@ -41,21 +41,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node<Task> nodePrev = node.prev;
         final Node<Task> nodeNext = node.next;
         if (nodePrev == null) {
-            if (nodeNext != null) {
-                head = nodeNext;
-            } else {
-                head = null;
-            }
+            head = nodeNext;
         } else {
             nodePrev.next = nodeNext;
         }
 
         if (nodeNext == null) {
-            if (nodePrev != null) {
-                tail = nodePrev;
-            } else {
-                tail = null;
-            }
+            tail = nodePrev;
         } else {
             nodeNext.prev = nodePrev;
         }
