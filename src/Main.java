@@ -114,5 +114,8 @@ public class Main {
         taskManager.dropTaskById(3);
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
+
+        System.out.println("Список задач по приоритету");
+        System.out.println(taskManager.getPrioritizedTasks());
     }
 }

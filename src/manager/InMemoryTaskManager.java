@@ -7,15 +7,13 @@ import task.TaskStatus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks = new HashMap<>();
     protected final Map<Integer, Epic> epicTasks = new HashMap<>();
     protected final Map<Integer, Subtask> subTasks = new HashMap<>();
+    protected final TreeSet<Task> prioritizedTasks = new TreeSet<>();
     private int taskCounter = 0;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -161,6 +159,11 @@ public class InMemoryTaskManager implements TaskManager {
             case "Task" -> tasks.put(taskId, task);
             default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
         }
+
+        if (task.getStartTime() != null & !task.getClass().getSimpleName().equals("Epic")) {
+            prioritizedTasks.add(task);
+        }
+
         return taskId;
     }
 
@@ -176,9 +179,12 @@ public class InMemoryTaskManager implements TaskManager {
             }
             case "Subtask" -> {
                 if (subTasks.containsKey(taskId)) {
+                    Task oldTask = subTasks.get(taskId);
                     Subtask subtask = (Subtask) newTask;
                     subTasks.put(taskId, subtask);
                     Integer epicId = subtask.getEpicId();
+                    prioritizedTasks.remove(oldTask);
+                    prioritizedTasks.add(subtask);
                     if (epicId != null) {
                         Epic epic = epicTasks.get(epicId);
                         addSubtaskToEpic(epic, subtask);
@@ -189,7 +195,10 @@ public class InMemoryTaskManager implements TaskManager {
             }
             case "Task" -> {
                 if (tasks.containsKey(taskId)) {
+                    Task oldTask = tasks.get(taskId);
                     tasks.put(taskId, newTask);
+                    prioritizedTasks.remove(oldTask);
+                    prioritizedTasks.add(newTask);
                 } else {
                     System.out.println("Задачи с таким taskId не существует");
                 }
@@ -272,5 +281,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
     }
 }
