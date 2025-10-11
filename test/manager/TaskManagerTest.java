@@ -168,4 +168,107 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Assertions.assertFalse(subtasks.contains(subtask1));
         Assertions.assertTrue(subtasks.contains(subtask2));
     }
+
+    @Test
+    public void checkEpicStatus() {
+        int epicId = taskManager.createTask(
+                new Epic(
+                        "Собраться в отпуск",
+                        "Спланировать и подготовить всё что нужно для хорошего отпуска",
+                        taskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        TaskType.EPIC,
+                        0,
+                        LocalDateTime.parse("1970-01-01T07:00:00")
+                )
+        );
+
+        int subtask1Id = taskManager.createTask(
+                new Subtask(
+                        "Купить билеты на самолёт",
+                        "Выбрать оптимальный рейс и купить билеты",
+                        taskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        TaskType.SUBTASK,
+                        30,
+                        LocalDateTime.parse("2025-10-01T10:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        int subtask2Id = taskManager.createTask(
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        taskManager.createTaskId(),
+                        TaskStatus.NEW,
+                        TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-10-05T12:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        Assertions.assertEquals(TaskStatus.NEW, taskManager.getEpicById(epicId).getStatus());
+
+        taskManager.updateTask(
+                subtask2Id,
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        subtask2Id,
+                        TaskStatus.DONE,
+                        TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-10-05T12:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        Assertions.assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epicId).getStatus());
+
+        taskManager.updateTask(
+                subtask1Id,
+                new Subtask(
+                        "Купить билеты на самолёт",
+                        "Выбрать оптимальный рейс и купить билеты",
+                        subtask1Id,
+                        TaskStatus.DONE,
+                        TaskType.SUBTASK,
+                        30,
+                        LocalDateTime.parse("2025-10-01T10:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+        Assertions.assertEquals(TaskStatus.DONE, taskManager.getEpicById(epicId).getStatus());
+
+        taskManager.updateTask(
+                subtask2Id,
+                new Subtask(
+                        "Найти жильё",
+                        "Выбрать подходящий отель и забронировать проживание",
+                        subtask2Id,
+                        TaskStatus.IN_PROGRESS,
+                        TaskType.SUBTASK,
+                        60,
+                        LocalDateTime.parse("2025-10-05T12:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+
+        taskManager.updateTask(
+                subtask1Id,
+                new Subtask(
+                        "Купить билеты на самолёт",
+                        "Выбрать оптимальный рейс и купить билеты",
+                        subtask1Id,
+                        TaskStatus.IN_PROGRESS,
+                        TaskType.SUBTASK,
+                        30,
+                        LocalDateTime.parse("2025-10-01T10:00:00"),
+                        taskManager.getEpicIdByName("Собраться в отпуск")
+                )
+        );
+        Assertions.assertEquals(TaskStatus.IN_PROGRESS, taskManager.getEpicById(epicId).getStatus());
+    }
 }
