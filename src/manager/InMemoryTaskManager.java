@@ -128,13 +128,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public Integer getEpicIdByName(String name) {
-        for (Task epic : epicTasks.values()) {
-            if (epic.getName().equals(name)) {
-                return epic.getId();
-            }
+        Optional<Integer> epicId = epicTasks.values()
+                .stream()
+                .filter(epic -> epic.getName().equals(name))
+                .map(Task::getId)
+                .findFirst();
+
+        if (epicId.isEmpty()) {
+            System.out.println("Эпик с таким названием не найден");
+            return null;
+        } else {
+            return epicId.get();
         }
-        System.out.println("Эпик с таким названием не найден");
-        return null;
     }
 
     @Override
@@ -222,14 +227,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getEpicSubtasks(int epicId) {
-        List<Subtask> epicSubtasks = new ArrayList<>();
-        Epic epic = epicTasks.get(epicId);
 
-        for (Task task : epic.getSubtasks()) {
-            epicSubtasks.add((Subtask) task);
-        }
-
-        return epicSubtasks;
+        return epicTasks.get(epicId).getSubtasks()
+                .stream()
+                .map(task -> (Subtask) task)
+                .toList();
     }
 
     public void addSubtaskToEpic(Epic epic, Subtask subtask) {
