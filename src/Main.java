@@ -13,7 +13,7 @@ public class Main {
                         taskManager.createTaskId(),
                         TaskStatus.NEW,
                         TaskType.TASK,
-                        15,
+                        30,
                         LocalDateTime.parse("2025-10-01T07:10:00")
                 )
         );
@@ -25,7 +25,7 @@ public class Main {
                         TaskStatus.NEW,
                         TaskType.TASK,
                         30,
-                        LocalDateTime.parse("2025-10-01T10:10:00")
+                        LocalDateTime.parse("2025-10-01T07:15:00")
                 )
         );
         taskManager.createTask(

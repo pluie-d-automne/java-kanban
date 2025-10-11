@@ -149,6 +149,12 @@ public class InMemoryTaskManager implements TaskManager {
             case "Epic" -> epicTasks.put(taskId, (Epic) task);
             case "Subtask" -> {
                 Subtask subtask = (Subtask) task;
+
+                if (checkPeriodOverlap(subtask)) {
+                    System.out.println("Вы пытаетесь добавить подзадачу на время, которое занято другой задачей.");
+                    return taskId;
+                }
+
                 subTasks.put(taskId, subtask);
 
                 if (subtask.getEpicId() != null) {
@@ -156,7 +162,13 @@ public class InMemoryTaskManager implements TaskManager {
                     addSubtaskToEpic(epic, subtask);
                 }
             }
-            case "Task" -> tasks.put(taskId, task);
+            case "Task" -> {
+                if (checkPeriodOverlap(task)) {
+                    System.out.println("Вы пытаетесь добавить задачу на время, которое занято другой задачей.");
+                    return taskId;
+                }
+                tasks.put(taskId, task);
+            }
             default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
         }
 
@@ -286,5 +298,20 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
+    }
+
+    public boolean checkTwoTasksOverlap (Task task1, Task task2) {
+        if (task1.getStartTime()==null || task2.getStartTime()==null) {
+            return true;
+        }
+        return !(task1.getStartTime().isAfter(task2.getEndTime()) || task1.getEndTime().isBefore(task2.getStartTime()));
+    }
+    public boolean checkPeriodOverlap(Task newTask) {
+        long result = getPrioritizedTasks()
+                .stream()
+                .map(task -> checkTwoTasksOverlap(task, newTask))
+                .filter(check -> check)
+                .count();
+        return result > 0;
     }
 }
