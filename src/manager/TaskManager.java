@@ -36,4 +36,6 @@ public interface TaskManager {
     List<Subtask> getEpicSubtasks(int epicId);
 
     List<Task> getPrioritizedTasks();
+
+    Integer getEpicIdByName(String name);
 }
