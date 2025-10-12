@@ -107,8 +107,11 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         Assertions.assertDoesNotThrow(() -> {fileBackedTaskManager.createTask(task1);});
 
         // Возьмём лок на файл, чтобы спровоцировать исключение
-        FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
-        FileLock lock = channel.lock();
-        Assertions.assertThrows(ManagerSaveException.class, () -> {fileBackedTaskManager.updateTask(1, task1);});
+
+        Assertions.assertThrows(ManagerSaveException.class, () -> {
+            FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+            FileLock lock = channel.lock();
+            fileBackedTaskManager.updateTask(1, task1);
+        });
     }
 }
