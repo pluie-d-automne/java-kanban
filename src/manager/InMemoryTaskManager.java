@@ -260,7 +260,7 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime subtaskEndTime = subtask.getEndTime();
             duration = duration.plus(subtask.getDuration());
 
-            if (startTime==null) {
+            if (startTime == null) {
                 startTime = subtaskStartTime;
                 endTime = subtaskEndTime;
             } else {
@@ -306,12 +306,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public boolean checkTwoTasksOverlap (Task task1, Task task2) {
-        if (task1.getStartTime()==null || task2.getStartTime()==null) {
+    public boolean checkTwoTasksOverlap(Task task1, Task task2) {
+        if (task1.getStartTime() == null || task2.getStartTime() == null) {
             return true;
         }
         return !(task1.getStartTime().isAfter(task2.getEndTime()) || task1.getEndTime().isBefore(task2.getStartTime()));
     }
+
     public boolean checkPeriodOverlap(Task newTask) {
         long result = getPrioritizedTasks()
                 .stream()
