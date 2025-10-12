@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.*;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -87,5 +90,25 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         Assertions.assertEquals(newTask, task);
         Assertions.assertEquals(newEpic, epic);
         Assertions.assertEquals(newSubtask, subtask);
+    }
+
+    @Test
+    public void checkException() throws IOException {
+        Task task1 = new Task(
+                "Сделать зарядку",
+                "Пробежать 30 минут",
+                1,
+                TaskStatus.NEW,
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:10:00")
+        );
+
+        Assertions.assertDoesNotThrow(() -> {fileBackedTaskManager.createTask(task1);});
+
+        // Возьмём лок на файл, чтобы спровоцировать исключение
+        FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+        FileLock lock = channel.lock();
+        Assertions.assertThrows(ManagerSaveException.class, () -> {fileBackedTaskManager.updateTask(1, task1);});
     }
 }
