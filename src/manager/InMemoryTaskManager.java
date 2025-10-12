@@ -305,6 +305,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(prioritizedTasks);
     }
 
+    @Override
     public boolean checkTwoTasksOverlap (Task task1, Task task2) {
         if (task1.getStartTime()==null || task2.getStartTime()==null) {
             return true;

@@ -38,4 +38,6 @@ public interface TaskManager {
     List<Task> getPrioritizedTasks();
 
     Integer getEpicIdByName(String name);
+
+    boolean checkTwoTasksOverlap (Task task1, Task task2);
 }

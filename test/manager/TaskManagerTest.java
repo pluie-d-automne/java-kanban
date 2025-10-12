@@ -328,4 +328,52 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         }
 
     }
+
+    @Test
+    public void checkPeriodOverlapsDefinedCorrectly() {
+        Task task1 = new Task(
+                "Сделать зарядку",
+                "Пробежать 30 минут",
+                taskManager.createTaskId(),
+                TaskStatus.NEW,
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:00:00")
+        );
+        Task task2 = new Task(
+                "Сходить за покупками",
+                "Купить хлеб овощи и фрукты",
+                taskManager.createTaskId(),
+                TaskStatus.NEW,
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:31:00")
+        );
+
+        Assertions.assertFalse(taskManager.checkTwoTasksOverlap(task1, task2));
+
+        task1 = new Task(
+                "Сделать зарядку",
+                "Пробежать 30 минут",
+                taskManager.createTaskId(),
+                TaskStatus.NEW,
+                TaskType.TASK,
+                30,
+                LocalDateTime.parse("2025-10-01T07:10:00")
+        );
+
+        Assertions.assertTrue(taskManager.checkTwoTasksOverlap(task1, task2));
+
+        task2 = new Task(
+                "Сходить за покупками",
+                "Купить хлеб овощи и фрукты",
+                taskManager.createTaskId(),
+                TaskStatus.NEW,
+                TaskType.TASK,
+                15,
+                LocalDateTime.parse("2025-10-01T07:11:00")
+        );
+
+        Assertions.assertTrue(taskManager.checkTwoTasksOverlap(task1, task2));
+    }
 }
