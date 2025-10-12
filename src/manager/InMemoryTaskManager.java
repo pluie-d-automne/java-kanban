@@ -161,11 +161,12 @@ public class InMemoryTaskManager implements TaskManager {
                     return taskId;
                 }
 
-                subTasks.put(taskId, subtask);
-
                 if (subtask.getEpicId() != null) {
+                    subTasks.put(taskId, subtask);
                     Epic epic = epicTasks.get(subtask.getEpicId());
                     addSubtaskToEpic(epic, subtask);
+                } else {
+                    System.out.println("Вы пытаетесь добавить подзадачу без эпика");
                 }
             }
             case "Task" -> {
