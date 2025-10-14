@@ -147,43 +147,35 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         int taskId = task.getId();
-
-        if (taskId > taskCounter) {
-            taskCounter = taskId;
-        }
-
-        switch (task.getClass().getSimpleName()) {
-            case "Epic" -> epicTasks.put(taskId, (Epic) task);
-            case "Subtask" -> {
-                Subtask subtask = (Subtask) task;
-
-                if (checkPeriodOverlap(subtask)) {
-                    System.out.println("Вы пытаетесь добавить подзадачу на время, которое занято другой задачей.");
-                    return taskId;
-                }
-
-                if (subtask.getEpicId() != null) {
-                    subTasks.put(taskId, subtask);
-                    Epic epic = epicTasks.get(subtask.getEpicId());
-                    addSubtaskToEpic(epic, subtask);
-                } else {
-                    System.out.println("Вы пытаетесь добавить подзадачу без эпика");
-                }
+        if (checkPeriodOverlap(task)) {
+            System.out.println("Вы пытаетесь добавить задачу на время, которое занято другой задачей.");
+        } else {
+            if (taskId > taskCounter) {
+                taskCounter = taskId;
             }
-            case "Task" -> {
-                if (checkPeriodOverlap(task)) {
-                    System.out.println("Вы пытаетесь добавить задачу на время, которое занято другой задачей.");
-                    return taskId;
+            switch (task.getClass().getSimpleName()) {
+                case "Epic" -> epicTasks.put(taskId, (Epic) task);
+                case "Subtask" -> {
+                    Subtask subtask = (Subtask) task;
+
+                    if (subtask.getEpicId() != null) {
+                        subTasks.put(taskId, subtask);
+                        Epic epic = epicTasks.get(subtask.getEpicId());
+                        addSubtaskToEpic(epic, subtask);
+                    } else {
+                        System.out.println("Вы пытаетесь добавить подзадачу без эпика");
+                    }
                 }
-                tasks.put(taskId, task);
+                case "Task" -> {
+                    tasks.put(taskId, task);
+                }
+                default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
             }
-            default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
-        }
 
-        if (task.getStartTime() != null & !task.getClass().getSimpleName().equals("Epic")) {
-            prioritizedTasks.add(task);
+            if (task.getStartTime() != null & !task.getClass().getSimpleName().equals("Epic")) {
+                prioritizedTasks.add(task);
+            }
         }
-
         return taskId;
     }
 

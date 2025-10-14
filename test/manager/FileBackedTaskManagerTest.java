@@ -6,18 +6,15 @@ import org.junit.jupiter.api.Test;
 import task.*;
 
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
-    FileBackedTaskManager fileBackedTaskManager;
-    File file = File.createTempFile("kanban", "csv");
+    private FileBackedTaskManager fileBackedTaskManager;
+    private final File file = File.createTempFile("kanban", "csv");
 
-    FileBackedTaskManagerTest() throws IOException {
+    public FileBackedTaskManagerTest() throws IOException {
         super(new FileBackedTaskManager(File.createTempFile("kanban", "csv").toString()));
     }
 

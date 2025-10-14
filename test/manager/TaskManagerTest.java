@@ -1,7 +1,6 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.*;
 
@@ -9,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
-    T taskManager;
+    private final T taskManager;
 
-    TaskManagerTest(T taskManager) {
+    public TaskManagerTest(T taskManager) {
         this.taskManager = taskManager;
     }
 

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InMemoryHistoryManagerTest {
-    InMemoryHistoryManager historyManager;
+    private InMemoryHistoryManager historyManager;
 
     @BeforeEach
     public void beforeEach() {
