@@ -8,6 +8,7 @@ import task.TaskStatus;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks = new HashMap<>();
@@ -245,48 +246,46 @@ public class InMemoryTaskManager implements TaskManager {
         calculateEpicStatus(epicId);
     }
 
+    public LocalDateTime getEpicStartTime(int epicId) {
+        Optional<LocalDateTime> result = getEpicSubtasks(epicId)
+                .stream()
+                .map(Task::getStartTime)
+                .min(Comparator.comparing(LocalDateTime::toString));
+        return result.orElse(null);
+    }
+
+    public LocalDateTime getEpicEndTime(int epicId) {
+        Optional<LocalDateTime> result = getEpicSubtasks(epicId)
+                .stream()
+                .map(Task::getStartTime)
+                .max(Comparator.comparing(LocalDateTime::toString));
+        return result.orElse(null);
+    }
+
+    public Duration getEpicDuration(int epicId) {
+        return getEpicSubtasks(epicId)
+                .stream()
+                .map(Task::getDuration)
+                .reduce(Duration.ofMinutes(0), Duration::plus);
+    }
+
     public void calculateEpicStatus(int epicId) {
-        List<TaskStatus> taskStatuses = new ArrayList<>();
-        LocalDateTime endTime = null;
-        LocalDateTime startTime = null;
-        Duration duration = Duration.ofMinutes(0);
-        List<Subtask> subtasks = getEpicSubtasks(epicId);
         Epic epic = epicTasks.get(epicId);
-        TaskStatus status;
+        epic.setDuration(getEpicDuration(epicId));
+        epic.setStartTime(getEpicStartTime(epicId));
+        epic.setEndTime(getEpicEndTime(epicId));
+        List<Subtask> subtasks = getEpicSubtasks(epicId);
 
-        for (Task subtask : subtasks) {
-            status = subtask.getStatus();
-            LocalDateTime subtaskStartTime = subtask.getStartTime();
-            LocalDateTime subtaskEndTime = subtask.getEndTime();
-            duration = duration.plus(subtask.getDuration());
-
-            if (startTime == null) {
-                startTime = subtaskStartTime;
-                endTime = subtaskEndTime;
-            } else {
-                if (startTime.isAfter(subtaskStartTime)) {
-                    startTime = subtaskStartTime;
-                }
-                if (endTime.isBefore(subtaskEndTime)) {
-                    endTime = subtaskEndTime;
-                }
-            }
-
-            if (!taskStatuses.contains(status)) {
-                taskStatuses.add(status);
-            }
-        }
-
-        epic.setDuration(duration);
-        epic.setStartTime(startTime);
-        epic.setEndTime(endTime);
+        Set<TaskStatus> taskStatuses =  subtasks.stream()
+                .map(Task::getStatus)
+                .collect(Collectors.toSet());
 
         if (taskStatuses.isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
         } else if (taskStatuses.size() == 1) {
-            if (taskStatuses.getFirst().equals(TaskStatus.NEW)) {
+            if (taskStatuses.contains(TaskStatus.NEW)) {
                 epic.setStatus(TaskStatus.NEW);
-            } else if (taskStatuses.getFirst().equals(TaskStatus.DONE)) {
+            } else if (taskStatuses.contains(TaskStatus.DONE)) {
                 epic.setStatus(TaskStatus.DONE);
             } else {
                 epic.setStatus(TaskStatus.IN_PROGRESS);
