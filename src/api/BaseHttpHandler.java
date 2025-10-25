@@ -22,8 +22,7 @@ public class BaseHttpHandler {
         httpExchange.close();
     }
 
-    protected void sendNotFound(HttpExchange httpExchange) throws IOException {
-        String text = "Запрашиваемый объект не найден";
+    protected void sendNotFound(HttpExchange httpExchange, String text) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         httpExchange.getResponseHeaders().add("Content-Type", "text/html;charset=utf-8");
         httpExchange.sendResponseHeaders(404, resp.length);

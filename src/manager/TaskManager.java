@@ -27,7 +27,11 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    int dropTaskById(int id);
+    int deleteTask(int id);
+
+    int deleteSubtask(int id);
+
+    int deleteEpic(int id);
 
     int createTask(Task task);
 

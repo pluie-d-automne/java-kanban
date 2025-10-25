@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import manager.NotFoundException;
 import manager.PeriodOverlapException;
 import manager.TaskManager;
 import task.Task;
@@ -32,20 +33,24 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         String[] path = httpExchange.getRequestURI().getPath().split("/");
 
         if (method.equals("GET") & path.length == 2) {
-            System.out.println("GET /tasks");
+            System.out.println("Выводим список задач.");
             List<TaskView> tasks = taskManager.getTasks().stream().map(this::taskToPojo).toList();
             sendText(httpExchange, gson.toJson(tasks));
         } else if (method.equals("GET") & path.length == 3) {
-            System.out.println("GET /tasks/{id}");
+            System.out.println("Выводим задачу по id");
             int taskId = Integer.parseInt(path[2]);
-            Task task = taskManager.getTaskById(taskId);
-            sendText(httpExchange, gson.toJson(taskToPojo(task)));
+            try{
+                Task task = taskManager.getTaskById(taskId);
+                sendText(httpExchange, gson.toJson(taskToPojo(task)));
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
+            }
         } else if (method.equals("POST") & path.length == 2) {
             InputStream inputStream = httpExchange.getRequestBody();
             String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             TaskView taskView = gson.fromJson(body, TaskView.class);
             if (taskView.id == 0) {
-                System.out.println("Создаём новую задачу");
+                System.out.println("Создаём новую задачу.");
                 try {
                     int taskId = taskManager.createTask(
                             new Task(
@@ -58,16 +63,40 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                                     LocalDateTime.parse(taskView.startTime)
                             )
                     );
-                    sendSuccess(httpExchange, "Создана задача с id=" + taskId);
+                    sendSuccess(httpExchange, "Создана задача с id=" + taskId + ".");
                 } catch (PeriodOverlapException e) {
                     sendHasOverlaps(httpExchange, e.getMessage());
                 }
             } else {
-                System.out.println("Надо обновить задачу " + taskView.id);
+                System.out.println("Обновляем задачу задачу с id=" + taskView.id + ".");
+                try {
+                    int taskId = taskManager.updateTask(
+                            taskView.id,
+                            new Task(
+                                    taskView.name,
+                                    taskView.description,
+                                    taskView.id,
+                                    taskView.status==null ? TaskStatus.NEW : taskView.status,
+                                    TaskType.TASK,
+                                    taskView.duration,
+                                    LocalDateTime.parse(taskView.startTime)
+                            )
+                    );
+                    sendSuccess(httpExchange, "Создана задача с id=" + taskId + " успешно обновлена.");
+                } catch (NotFoundException e) {
+                    sendNotFound(httpExchange, e.getMessage());
+                }
             }
         } else if (method.equals("DELETE") & path.length == 3) {
             int taskId = Integer.parseInt(path[2]);
-            taskManager.dropTaskById(taskId);
+            try {
+                taskManager.deleteTask(taskId);
+                sendSuccess(httpExchange, "Задача с id=" + taskId +" успешно удалена.");
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
+            }
+        } else {
+            sendNotFound(httpExchange, "Указанный метод + путь не найден");
         }
     }
 
@@ -86,13 +115,13 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     public static class TaskView {
-        private String name;
-        private String description;
+        private final String name;
+        private final String description;
         private int id;
         private TaskStatus status;
         private TaskType taskType;
-        private long duration;
-        private String startTime;
+        private final long duration;
+        private final String startTime;
 
         public TaskView (String name,
                          String desc,
@@ -121,10 +150,21 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             this.duration = duration;
             this.startTime = startTime;
         }
-    }
 
-    class TaskViewListTypeToken extends TypeToken<List<TaskView>> {
-        // здесь ничего не нужно реализовывать
+        public TaskView (String name,
+                         String desc,
+                         int id,
+                         TaskStatus status,
+                         long duration,
+                         String startTime
+        ) {
+            this.name = name;
+            this.description = desc;
+            this.id = id;
+            this.status = status;
+            this.duration = duration;
+            this.startTime = startTime;
+        }
     }
 }
 

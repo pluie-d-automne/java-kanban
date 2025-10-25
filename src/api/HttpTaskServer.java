@@ -13,8 +13,7 @@ import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 
 public class HttpTaskServer {
-    private static int PORT = 8080;
-
+    private static final int PORT = 8080;
 
     public static void main(String[] args) throws IOException {
         File file = File.createTempFile("kanban", "csv");

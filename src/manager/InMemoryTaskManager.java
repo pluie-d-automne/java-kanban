@@ -65,8 +65,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.add(task);
             return task;
         } else {
-            System.out.println("Задачи с таким id не существует");
-            return null;
+            throw new NotFoundException("Задачи с таким id не существует");
         }
     }
 
@@ -77,8 +76,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.add(task);
             return task;
         } else {
-            System.out.println("Эпика с таким id не существует");
-            return null;
+            throw new NotFoundException("Эпика с таким id не существует");
         }
     }
 
@@ -89,26 +87,24 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.add(task);
             return task;
         } else {
-            System.out.println("Подзадачи с таким id не существует");
-            return null;
+            throw new NotFoundException("Подзадачи с таким id не существует");
         }
     }
 
     @Override
-    public int dropTaskById(int id) {
+    public int deleteTask(int id) {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
-        } else if (epicTasks.containsKey(id)) {
-            List<Subtask> epicSubtasks = getEpicSubtasks(id);
+            historyManager.remove(id);
+            return id;
+        } else {
+            throw new NotFoundException("Задачи с таким id не существует");
+        }
+    }
 
-            for (Subtask subtask : epicSubtasks) {
-                int subtaskId = subtask.getId();
-                subTasks.remove(subtaskId);
-                historyManager.remove(subtaskId);
-            }
-
-            epicTasks.remove(id);
-        } else if (subTasks.containsKey(id)) {
+    @Override
+    public int deleteSubtask(int id) {
+        if (subTasks.containsKey(id)) {
             Subtask subtask = subTasks.get(id);
             Integer epicId = subtask.getEpicId();
             Epic epic = epicTasks.get(epicId);
@@ -120,12 +116,30 @@ public class InMemoryTaskManager implements TaskManager {
             }
 
             subTasks.remove(id);
+            historyManager.remove(id);
+            return id;
         } else {
-            System.out.println("Задачи с таким id не существует");
-            return -1;
+            throw new NotFoundException("Задачи с таким id не существует");
         }
-        historyManager.remove(id);
-        return id;
+    }
+
+    @Override
+    public int deleteEpic(int id) {
+        if (epicTasks.containsKey(id)) {
+            List<Subtask> epicSubtasks = getEpicSubtasks(id);
+
+            for (Subtask subtask : epicSubtasks) {
+                int subtaskId = subtask.getId();
+                subTasks.remove(subtaskId);
+                historyManager.remove(subtaskId);
+            }
+
+            epicTasks.remove(id);
+            historyManager.remove(id);
+            return id;
+        } else {
+            throw new NotFoundException("Задачи с таким id не существует");
+        }
     }
 
     @Override
@@ -184,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (epicTasks.containsKey(taskId)) {
                     epicTasks.put(taskId, (Epic) newTask);
                 } else {
-                    System.out.println("Эпика с таким taskId не существует");
+                    throw new NotFoundException("Эпика с id=" + taskId + " не существует");
                 }
             }
             case "Subtask" -> {
@@ -200,7 +214,7 @@ public class InMemoryTaskManager implements TaskManager {
                         addSubtaskToEpic(epic, subtask);
                     }
                 } else {
-                    System.out.println("Подзадачи с таким taskId не существует");
+                    throw new NotFoundException("Подзадачи с id=" + taskId + " не существует");
                 }
             }
             case "Task" -> {
@@ -210,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
                     prioritizedTasks.remove(oldTask);
                     prioritizedTasks.add(newTask);
                 } else {
-                    System.out.println("Задачи с таким taskId не существует");
+                    throw new NotFoundException("Задачи с id=" + taskId + " не существует");
                 }
             }
             default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
