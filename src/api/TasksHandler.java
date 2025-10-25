@@ -2,7 +2,6 @@ package api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -123,13 +122,14 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         private final long duration;
         private final String startTime;
 
-        public TaskView (String name,
-                         String desc,
-                         int id,
-                         TaskStatus status,
-                         TaskType taskType,
-                         long duration,
-                         String startTime
+        public TaskView (
+                String name,
+                String desc,
+                int id,
+                TaskStatus status,
+                TaskType taskType,
+                long duration,
+                String startTime
         ) {
             this.name = name;
             this.description = desc;
@@ -140,10 +140,11 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public TaskView (String name,
-                         String desc,
-                         long duration,
-                         String startTime
+        public TaskView (
+                String name,
+                String desc,
+                long duration,
+                String startTime
         ) {
             this.name = name;
             this.description = desc;
@@ -151,12 +152,13 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public TaskView (String name,
-                         String desc,
-                         int id,
-                         TaskStatus status,
-                         long duration,
-                         String startTime
+        public TaskView (
+                String name,
+                String desc,
+                int id,
+                TaskStatus status,
+                long duration,
+                String startTime
         ) {
             this.name = name;
             this.description = desc;

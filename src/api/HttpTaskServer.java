@@ -33,10 +33,10 @@ public class HttpTaskServer {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
 
         httpServer.createContext("/tasks", new TasksHandler(taskManager));
-        httpServer.createContext("/subtasks", new SubtasksHandler());
+        httpServer.createContext("/subtasks", new SubtasksHandler(taskManager));
         httpServer.createContext("/epics", new EpicsHandler());
         httpServer.createContext("/history", new HistoryHandler());
-        httpServer.createContext("/prioritixed", new PrioritizedHandler());
+        httpServer.createContext("/prioritised", new PrioritizedHandler());
 
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
