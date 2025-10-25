@@ -148,7 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
     public int createTask(Task task) {
         int taskId = task.getId();
         if (checkPeriodOverlap(task)) {
-            System.out.println("Вы пытаетесь добавить задачу на время, которое занято другой задачей.");
+            throw new PeriodOverlapException("Вы пытаетесь добавить задачу на время, которое занято другой задачей.");
         } else {
             if (taskId > taskCounter) {
                 taskCounter = taskId;
@@ -166,9 +166,7 @@ public class InMemoryTaskManager implements TaskManager {
                         System.out.println("Вы пытаетесь добавить подзадачу без эпика");
                     }
                 }
-                case "Task" -> {
-                    tasks.put(taskId, task);
-                }
+                case "Task" -> tasks.put(taskId, task);
                 default -> System.out.println("Вы пытаетесь записать задачу неизвестного типа");
             }
 
