@@ -33,7 +33,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 
         if (method.equals("GET") & path.length == 2) {
             System.out.println("Выводим список задач.");
-            List<TaskView> tasks = taskManager.getTasks().stream().map(this::taskToPojo).toList();
+            List<TaskView> tasks = taskManager.getTasks().stream().map(TasksHandler::taskToPojo).toList();
             sendText(httpExchange, gson.toJson(tasks));
         } else if (method.equals("GET") & path.length == 3) {
             System.out.println("Выводим задачу по id");
@@ -99,7 +99,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public TaskView taskToPojo(Task task) {
+    public static TaskView taskToPojo(Task task) {
 
         return new TaskView(
                 task.getName(),

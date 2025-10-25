@@ -44,4 +44,6 @@ public interface TaskManager {
     Integer getEpicIdByName(String name);
 
     boolean checkTwoTasksOverlap(Task task1, Task task2);
+
+    public List<Task> getHistory();
 }
