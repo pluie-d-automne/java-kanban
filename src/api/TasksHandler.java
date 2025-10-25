@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import manager.ManagerSaveException;
 import manager.NotFoundException;
 import manager.PeriodOverlapException;
 import manager.TaskManager;
@@ -65,6 +66,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                     sendSuccess(httpExchange, "Создана задача с id=" + taskId + ".");
                 } catch (PeriodOverlapException e) {
                     sendHasOverlaps(httpExchange, e.getMessage());
+                } catch (ManagerSaveException e) {
+                    sendInternalServerError(httpExchange);
                 }
             } else {
                 System.out.println("Обновляем задачу задачу с id=" + taskView.id + ".");
@@ -84,6 +87,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                     sendSuccess(httpExchange, "Задача с id=" + taskId + " успешно обновлена.");
                 } catch (NotFoundException e) {
                     sendNotFound(httpExchange, e.getMessage());
+                } catch (ManagerSaveException e) {
+                    sendInternalServerError(httpExchange);
                 }
             }
         } else if (method.equals("DELETE") & path.length == 3) {
@@ -93,6 +98,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                 sendSuccess(httpExchange, "Задача с id=" + taskId +" успешно удалена.");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
+            } catch (ManagerSaveException e) {
+                sendInternalServerError(httpExchange);
             }
         } else {
             sendNotFound(httpExchange, "Указанный метод + путь не найден");

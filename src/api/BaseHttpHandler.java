@@ -37,4 +37,14 @@ public class BaseHttpHandler {
         httpExchange.getResponseBody().write(resp);
         httpExchange.close();
     }
+
+    protected void sendInternalServerError(HttpExchange httpExchange) throws IOException {
+        String text = "Internal Server Error";
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+        httpExchange.getResponseHeaders().add("Content-Type", "text/html;charset=utf-8");
+        httpExchange.sendResponseHeaders(500, resp.length);
+        httpExchange.getResponseBody().write(resp);
+        httpExchange.close();
+    }
 }
+
