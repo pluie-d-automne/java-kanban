@@ -81,7 +81,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                                     LocalDateTime.parse(taskView.startTime)
                             )
                     );
-                    sendSuccess(httpExchange, "Создана задача с id=" + taskId + " успешно обновлена.");
+                    sendSuccess(httpExchange, "Задача с id=" + taskId + " успешно обновлена.");
                 } catch (NotFoundException e) {
                     sendNotFound(httpExchange, e.getMessage());
                 }

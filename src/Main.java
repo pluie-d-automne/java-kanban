@@ -123,11 +123,35 @@ public class Main {
         }
 
         System.out.println("\nЗапросим задачи в разном порядке:");
-        taskManager.getEpicById(3);
-        taskManager.getEpicById(4);
-        taskManager.getTaskById(2);
-        taskManager.getTaskById(1);
-        taskManager.getTaskById(2);
+        try{
+            taskManager.getEpicById(3);
+        }  catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getEpicById(4);
+        }  catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getTaskById(2);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try{
+            taskManager.getTaskById(1);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try{
+            taskManager.getTaskById(2);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 

@@ -32,7 +32,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 
         if (method.equals("GET") & path.length == 2) {
             System.out.println("Выводим список подзадач.");
-            List<SubtaskView> subtasks = taskManager.getSubTasks().stream().map(this::subtaskToPojo).toList();
+            List<SubtaskView> subtasks = taskManager.getSubTasks().stream().map(SubtasksHandler::subtaskToPojo).toList();
             sendText(httpExchange, gson.toJson(subtasks));
         } else if (method.equals("GET") & path.length == 3) {
             System.out.println("Выводим подзадачу по id");
@@ -82,7 +82,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                                     subtaskView.epicId
                             )
                     );
-                    sendSuccess(httpExchange, "Создана задача с id=" + taskId + " успешно обновлена.");
+                    sendSuccess(httpExchange, "Подзадача с id=" + taskId + " успешно обновлена.");
                 } catch (NotFoundException e) {
                     sendNotFound(httpExchange, e.getMessage());
                 }
@@ -100,7 +100,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    public SubtaskView subtaskToPojo(Subtask subtask) {
+    public static SubtaskView subtaskToPojo(Subtask subtask) {
 
         return new SubtaskView(
                 subtask.getName(),

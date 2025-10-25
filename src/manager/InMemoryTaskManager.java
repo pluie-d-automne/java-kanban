@@ -234,11 +234,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getEpicSubtasks(int epicId) {
-
-        return epicTasks.get(epicId).getSubtasks()
-                .stream()
-                .map(task -> (Subtask) task)
-                .toList();
+        if (epicTasks.containsKey(epicId)) {
+            return epicTasks.get(epicId).getSubtasks()
+                    .stream()
+                    .map(task -> (Subtask) task)
+                    .toList();
+        } else {
+            throw new NotFoundException("Эпик с id=" + epicId + " не найден.");
+        }
     }
 
     public void addSubtaskToEpic(Epic epic, Subtask subtask) {
