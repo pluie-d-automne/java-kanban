@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
@@ -31,30 +32,10 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String method = httpExchange.getRequestMethod();
         String[] path = httpExchange.getRequestURI().getPath().split("/");
-
         if (method.equals("GET") & path.length == 2) {
             System.out.println("Выводим список эпиков.");
             List<EpicView> tasks = taskManager.getEpicTasks().stream().map(this::epicToPojo).toList();
             sendText(httpExchange, gson.toJson(tasks));
-        } else if (method.equals("GET") & path.length == 3) {
-            System.out.println("Выводим эпик по id");
-            int taskId = Integer.parseInt(path[2]);
-            try{
-                Epic task = taskManager.getEpicById(taskId);
-                sendText(httpExchange, gson.toJson(epicToPojo(task)));
-            } catch (NotFoundException e) {
-                sendNotFound(httpExchange, e.getMessage());
-            }
-        } else if (method.equals("GET") & path.length == 4 & path[3].equals("subtasks")) {
-            System.out.println("Выводим подзадачи для эпика");
-            int taskId = Integer.parseInt(path[2]);
-            try {
-                List<Subtask> subtasks = taskManager.getEpicSubtasks(taskId);
-                List<SubtasksHandler.SubtaskView> tasks = subtasks.stream().map(SubtasksHandler::subtaskToPojo).toList();
-                sendText(httpExchange, gson.toJson(tasks));
-            } catch (NotFoundException e) {
-                sendNotFound(httpExchange, e.getMessage());
-            }
         } else if (method.equals("POST") & path.length == 2) {
             InputStream inputStream = httpExchange.getRequestBody();
             String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
@@ -110,6 +91,25 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {
                 sendInternalServerError(httpExchange);
+            }
+        } else if (method.equals("GET") & path.length == 3) {
+            System.out.println("Выводим эпик по id");
+            int taskId = Integer.parseInt(path[2]);
+            try{
+                Epic task = taskManager.getEpicById(taskId);
+                sendText(httpExchange, gson.toJson(epicToPojo(task)));
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
+            }
+        } else if (method.equals("GET") & path.length == 4 & path[3].equals("subtasks")) {
+            System.out.println("Выводим подзадачи для эпика");
+            int taskId = Integer.parseInt(path[2]);
+            try {
+                List<Subtask> subtasks = taskManager.getEpicSubtasks(taskId);
+                List<SubtasksHandler.SubtaskView> tasks = subtasks.stream().map(SubtasksHandler::subtaskToPojo).toList();
+                sendText(httpExchange, gson.toJson(tasks));
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
             }
         } else {
             sendNotFound(httpExchange, "Указанный метод + путь не найден");
