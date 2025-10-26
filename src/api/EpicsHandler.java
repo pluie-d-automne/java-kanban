@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
@@ -69,7 +68,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                                     epicView.name,
                                     epicView.description,
                                     epicView.id,
-                                    epicView.status==null ? TaskStatus.NEW : epicView.status,
+                                    epicView.status == null ? TaskStatus.NEW : epicView.status,
                                     TaskType.EPIC,
                                     epicView.duration,
                                     LocalDateTime.parse(epicView.startTime)
@@ -86,7 +85,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             int taskId = Integer.parseInt(path[2]);
             try {
                 taskManager.deleteEpic(taskId);
-                sendText(httpExchange, "{\"action\":\"epic_deleted\",\"task_id\":" + taskId +"}");
+                sendText(httpExchange, "{\"action\":\"epic_deleted\",\"task_id\":" + taskId + "}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {
@@ -95,7 +94,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         } else if (method.equals("GET") & path.length == 3) {
             System.out.println("Выводим эпик по id");
             int taskId = Integer.parseInt(path[2]);
-            try{
+            try {
                 Epic task = taskManager.getEpicById(taskId);
                 sendText(httpExchange, gson.toJson(epicToPojo(task)));
             } catch (NotFoundException e) {
@@ -139,7 +138,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
         private final long duration;
         private final String startTime;
 
-        public EpicView (
+        public EpicView(
                 String name,
                 String desc,
                 int id,
@@ -157,7 +156,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public EpicView (
+        public EpicView(
                 String name,
                 String desc,
                 long duration,
@@ -169,7 +168,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public EpicView (
+        public EpicView(
                 String name,
                 String desc,
                 int id,

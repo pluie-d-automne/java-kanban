@@ -38,7 +38,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         } else if (method.equals("GET") & path.length == 3) {
             System.out.println("Выводим подзадачу по id");
             int taskId = Integer.parseInt(path[2]);
-            try{
+            try {
                 Subtask subtask = taskManager.getSubtaskById(taskId);
                 sendText(httpExchange, gson.toJson(subtaskToPojo(subtask)));
             } catch (NotFoundException e) {
@@ -78,7 +78,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                                     subtaskView.name,
                                     subtaskView.description,
                                     subtaskView.id,
-                                    subtaskView.status==null ? TaskStatus.NEW : subtaskView.status,
+                                    subtaskView.status == null ? TaskStatus.NEW : subtaskView.status,
                                     TaskType.SUBTASK,
                                     subtaskView.duration,
                                     LocalDateTime.parse(subtaskView.startTime),
@@ -98,7 +98,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             int taskId = Integer.parseInt(path[2]);
             try {
                 taskManager.deleteSubtask(taskId);
-                sendText(httpExchange, "{\"action\":\"subtask_deleted\",\"task_id\":" + taskId +"}");
+                sendText(httpExchange, "{\"action\":\"subtask_deleted\",\"task_id\":" + taskId + "}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {
@@ -134,7 +134,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
         private final long duration;
         private final String startTime;
 
-        public SubtaskView (
+        public SubtaskView(
                 String name,
                 String desc,
                 int id,
@@ -154,7 +154,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public SubtaskView (
+        public SubtaskView(
                 String name,
                 String desc,
                 long duration,
@@ -168,7 +168,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             this.epicId = epicId;
         }
 
-        public SubtaskView (
+        public SubtaskView(
                 String name,
                 String desc,
                 int id,

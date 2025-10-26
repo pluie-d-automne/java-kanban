@@ -88,7 +88,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        try{
+        try {
             taskManager.createTask(
                     new Subtask(
                             "Найти жильё",
@@ -105,7 +105,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        try{
+        try {
             taskManager.createTask(
                     new Subtask(
                             "Купить путеводитель",
@@ -123,7 +123,8 @@ public class Main {
         }
 
         System.out.println("\nЗапросим задачи в разном порядке:");
-        try{
+
+        try {
             taskManager.getEpicById(3);
         }  catch (NotFoundException e) {
             System.out.println(e.getMessage());
@@ -141,17 +142,18 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        try{
+        try {
             taskManager.getTaskById(1);
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
         }
 
-        try{
+        try {
             taskManager.getTaskById(2);
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
         }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 
@@ -167,20 +169,24 @@ public class Main {
         System.out.println(taskManager.getHistory());
 
         System.out.println("Удалим задачу 5");
-        try{
+
+        try {
             taskManager.deleteTask(5);
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
         }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 
         System.out.println("Удалим эпик 3 - с подзадачами");
-        try{
+
+        try {
             taskManager.deleteEpic(3);
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
         }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 

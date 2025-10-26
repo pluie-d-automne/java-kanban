@@ -39,7 +39,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         } else if (method.equals("GET") & path.length == 3) {
             System.out.println("Выводим задачу по id");
             int taskId = Integer.parseInt(path[2]);
-            try{
+            try {
                 Task task = taskManager.getTaskById(taskId);
                 sendText(httpExchange, gson.toJson(taskToPojo(task)));
             } catch (NotFoundException e) {
@@ -78,7 +78,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                                     taskView.name,
                                     taskView.description,
                                     taskView.id,
-                                    taskView.status==null ? TaskStatus.NEW : taskView.status,
+                                    taskView.status == null ? TaskStatus.NEW : taskView.status,
                                     TaskType.TASK,
                                     taskView.duration,
                                     LocalDateTime.parse(taskView.startTime)
@@ -97,7 +97,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             int taskId = Integer.parseInt(path[2]);
             try {
                 taskManager.deleteTask(taskId);
-                sendText(httpExchange, "{\"action\":\"task_deleted\",\"task_id\":" + taskId +"}");
+                sendText(httpExchange, "{\"action\":\"task_deleted\",\"task_id\":" + taskId + "}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {
@@ -131,7 +131,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
         private final long duration;
         private final String startTime;
 
-        public TaskView (
+        public TaskView(
                 String name,
                 String desc,
                 int id,
@@ -149,7 +149,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public TaskView (
+        public TaskView(
                 String name,
                 String desc,
                 long duration,
@@ -161,7 +161,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             this.startTime = startTime;
         }
 
-        public TaskView (
+        public TaskView(
                 String name,
                 String desc,
                 int id,
