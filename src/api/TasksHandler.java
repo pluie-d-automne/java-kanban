@@ -87,6 +87,8 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
                     sendSuccess(httpExchange, "Задача с id=" + taskId + " успешно обновлена.");
                 } catch (NotFoundException e) {
                     sendNotFound(httpExchange, e.getMessage());
+                } catch (PeriodOverlapException e) {
+                    sendHasOverlaps(httpExchange, e.getMessage());
                 } catch (ManagerSaveException e) {
                     sendInternalServerError(httpExchange);
                 }
@@ -95,7 +97,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             int taskId = Integer.parseInt(path[2]);
             try {
                 taskManager.deleteTask(taskId);
-                sendSuccess(httpExchange, "Задача с id=" + taskId +" успешно удалена.");
+                sendText(httpExchange, "{\"action\":\"task_deleted\",\"task_id\":" + taskId +"}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {

@@ -193,6 +193,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateTask(int taskId, Task newTask) {
+        if (checkPeriodOverlap(newTask)) {
+            throw new PeriodOverlapException("Вы пытаетесь поставить задачу на время, которое занято другой задачей.");
+        }
         switch (newTask.getClass().getSimpleName()) {
             case "Epic" -> {
                 if (epicTasks.containsKey(taskId)) {
@@ -323,6 +326,7 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean checkPeriodOverlap(Task newTask) {
         long result = getPrioritizedTasks()
                 .stream()
+                .filter(task -> task.getId() != newTask.getId())
                 .map(task -> checkTwoTasksOverlap(task, newTask))
                 .filter(check -> check)
                 .count();
