@@ -105,7 +105,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             int taskId = Integer.parseInt(path[2]);
             try {
                 taskManager.deleteEpic(taskId);
-                sendSuccess(httpExchange, "Задача с id=" + taskId +" успешно удалена.");
+                sendText(httpExchange, "{\"action\":\"epic_deleted\",\"task_id\":" + taskId +"}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {

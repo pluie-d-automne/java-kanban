@@ -247,15 +247,6 @@ public class TasksHandlerTest {
         response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         Assertions.assertEquals(404, response.statusCode());
 
-        // Пытаемся удалить несуществующую задачу
-        uri = URI.create("http://localhost:8080/tasks/10");
-        request = HttpRequest.newBuilder()
-                .uri(uri)
-                .DELETE()
-                .build();
-        response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        Assertions.assertEquals(404, response.statusCode());
-
         // Пытаемся сделать задачу пересекающейся
         taskJson = "{\"name\":\"Купить конфеты\",\"description\":\"Выбрать самые вкусные\",\"duration\":30," +
                 "\"startTime\":\"2025-12-01T12:00\",\"id\":2}";

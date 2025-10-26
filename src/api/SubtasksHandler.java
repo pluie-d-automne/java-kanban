@@ -90,13 +90,15 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                     sendNotFound(httpExchange, e.getMessage());
                 } catch (ManagerSaveException e) {
                     sendInternalServerError(httpExchange);
+                } catch (PeriodOverlapException e) {
+                    sendHasOverlaps(httpExchange, e.getMessage());
                 }
             }
         } else if (method.equals("DELETE") & path.length == 3) {
             int taskId = Integer.parseInt(path[2]);
             try {
-                taskManager.deleteTask(taskId);
-                sendSuccess(httpExchange, "Задача с id=" + taskId +" успешно удалена.");
+                taskManager.deleteSubtask(taskId);
+                sendText(httpExchange, "{\"action\":\"subtask_deleted\",\"task_id\":" + taskId +"}");
             } catch (NotFoundException e) {
                 sendNotFound(httpExchange, e.getMessage());
             } catch (ManagerSaveException e) {
