@@ -1,13 +1,13 @@
-import manager.InMemoryTaskManager;
-import manager.NotFoundException;
-import manager.PeriodOverlapException;
+import exceptions.NotFoundException;
+import exceptions.PeriodOverlapException;
+import manager.*;
 import task.*;
 import java.time.LocalDateTime;
 
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getInmemoryTaskManager();
 
         try {
             taskManager.createTask(

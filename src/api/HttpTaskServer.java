@@ -10,11 +10,19 @@ import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    public static TaskManager taskManager;
-    static HttpServer httpServer;
+    private static TaskManager taskManager;
+    private static HttpServer httpServer;
 
-    HttpTaskServer(TaskManager taskManager) {
+    public HttpTaskServer(TaskManager taskManager) throws IOException {
         HttpTaskServer.taskManager = taskManager;
+
+        httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
+
+        httpServer.createContext("/tasks", new TasksHandler(taskManager));
+        httpServer.createContext("/subtasks", new SubtasksHandler(taskManager));
+        httpServer.createContext("/epics", new EpicsHandler(taskManager));
+        httpServer.createContext("/history", new HistoryHandler(taskManager));
+        httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager));
     }
 
     public static void main(String[] args) throws IOException {
@@ -23,17 +31,11 @@ public class HttpTaskServer {
             File file = File.createTempFile("kanban", "csv");
             taskManager = Managers.getDefault(file.getPath());
         }
-        start();
+        HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
+        httpTaskServer.start();
     }
 
-    public static void start() throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
-
-        httpServer.createContext("/tasks", new TasksHandler(taskManager));
-        httpServer.createContext("/subtasks", new SubtasksHandler(taskManager));
-        httpServer.createContext("/epics", new EpicsHandler(taskManager));
-        httpServer.createContext("/history", new HistoryHandler(taskManager));
-        httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager));
+    public static void start() {
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }

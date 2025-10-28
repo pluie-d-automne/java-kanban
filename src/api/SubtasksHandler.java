@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import manager.ManagerSaveException;
-import manager.NotFoundException;
-import manager.PeriodOverlapException;
+import exceptions.ManagerSaveException;
+import exceptions.NotFoundException;
+import exceptions.PeriodOverlapException;
 import manager.TaskManager;
 import task.Subtask;
 import task.TaskStatus;
@@ -20,9 +20,9 @@ import java.util.List;
 
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
-    Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder().create();
 
-    SubtasksHandler(TaskManager taskManager) {
+    public SubtasksHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 

@@ -12,9 +12,9 @@ import java.util.List;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
-    Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder().create();
 
-    PrioritizedHandler(TaskManager taskManager) {
+    public PrioritizedHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 

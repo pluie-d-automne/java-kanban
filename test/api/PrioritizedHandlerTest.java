@@ -21,9 +21,12 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 
 public class PrioritizedHandlerTest {
-    TaskManager taskManager = new InMemoryTaskManager();
-    HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    HttpClient httpClient = HttpClient.newHttpClient();
+    private final TaskManager taskManager = new InMemoryTaskManager();
+    private final HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    public PrioritizedHandlerTest() throws IOException {
+    }
 
     @BeforeEach
     public void beforeEach() throws IOException {

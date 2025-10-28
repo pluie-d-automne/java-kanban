@@ -19,9 +19,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class SubtaskHandlerTest {
-    TaskManager taskManager = new InMemoryTaskManager();
-    HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    HttpClient httpClient = HttpClient.newHttpClient();
+    private final TaskManager taskManager = new InMemoryTaskManager();
+    private final HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    public SubtaskHandlerTest() throws IOException {
+    }
 
     @BeforeEach
     public void beforeEach() throws IOException {
