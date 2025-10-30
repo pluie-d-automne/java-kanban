@@ -14,7 +14,7 @@ public class Epic extends Task {
                 int id,
                 TaskStatus status,
                 TaskType taskType,
-                int duration,
+                long duration,
                 LocalDateTime startTime) {
         super(name, description, id, status, taskType, duration, startTime);
         this.endTime = startTime.plus(Duration.ofMinutes(duration));
