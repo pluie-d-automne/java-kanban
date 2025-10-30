@@ -22,11 +22,17 @@ import java.util.List;
 
 public class TasksHandlerTest {
     private final TaskManager taskManager = new InMemoryTaskManager();
-    private final HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpTaskServer httpTaskServer;
 
-    public TasksHandlerTest() throws IOException {
+    {
+        try {
+            httpTaskServer = new HttpTaskServer(taskManager);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     @BeforeEach
     public void beforeEach() throws IOException {

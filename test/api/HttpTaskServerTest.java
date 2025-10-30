@@ -16,11 +16,17 @@ import java.time.Duration;
 
 public class HttpTaskServerTest {
     private final TaskManager taskManager = new InMemoryTaskManager();
-    private final HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpTaskServer httpTaskServer;
 
-    public HttpTaskServerTest() throws IOException {
+    {
+        try {
+            httpTaskServer = new HttpTaskServer(taskManager);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     @AfterEach
     public void afterEach() {

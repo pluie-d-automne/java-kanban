@@ -10,12 +10,9 @@ import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    private static TaskManager taskManager;
-    private static HttpServer httpServer;
+    private final HttpServer httpServer;
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
-        HttpTaskServer.taskManager = taskManager;
-
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
 
         httpServer.createContext("/tasks", new TasksHandler(taskManager));
@@ -26,21 +23,19 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) throws IOException {
-        if (taskManager == null) {
-            System.out.println("Создаём таск-менеджер по умолчанию");
-            File file = File.createTempFile("kanban", "csv");
-            taskManager = Managers.getDefault(file.getPath());
-        }
+        System.out.println("Создаём таск-менеджер по умолчанию");
+        File file = File.createTempFile("kanban", "csv");
+        TaskManager taskManager = Managers.getDefault(file.getPath());
         HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
         httpTaskServer.start();
     }
 
-    public static void start() {
+    public void start() {
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }
 
-    public static void stop() {
+    public void stop() {
         httpServer.stop(0);
         System.out.println("HTTP-сервер остановлен");
     }
