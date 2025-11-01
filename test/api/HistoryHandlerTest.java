@@ -23,20 +23,12 @@ import java.util.List;
 
 public class HistoryHandlerTest {
     private final TaskManager taskManager = new InMemoryTaskManager();
-    private final HttpTaskServer httpTaskServer;
-
-    {
-        try {
-            httpTaskServer = new HttpTaskServer(taskManager);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private HttpTaskServer httpTaskServer;
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     @BeforeEach
     public void beforeEach() throws IOException {
+        httpTaskServer = new HttpTaskServer(taskManager);
         taskManager.deleteAllTasks();
         taskManager.deleteAllEpics();
         taskManager.deleteAllSubtasks();

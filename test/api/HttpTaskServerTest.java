@@ -4,6 +4,7 @@ import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,17 +17,13 @@ import java.time.Duration;
 
 public class HttpTaskServerTest {
     private final TaskManager taskManager = new InMemoryTaskManager();
-    private final HttpTaskServer httpTaskServer;
-
-    {
-        try {
-            httpTaskServer = new HttpTaskServer(taskManager);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private HttpTaskServer httpTaskServer;
     private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    @BeforeEach
+    public void beforeEach() throws IOException {
+        httpTaskServer = new HttpTaskServer(taskManager);
+    }
 
     @AfterEach
     public void afterEach() {
