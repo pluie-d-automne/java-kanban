@@ -99,4 +99,8 @@ public class Task implements Comparable<Task> {
     public int compareTo(Task task) {
         return this.startTime.compareTo(task.startTime);
     }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
 }

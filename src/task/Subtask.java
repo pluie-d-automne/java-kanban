@@ -10,7 +10,7 @@ public class Subtask extends Task {
                    int id,
                    TaskStatus status,
                    TaskType taskType,
-                   int duration,
+                   long duration,
                    LocalDateTime startTime,
                    Integer epicId) {
         super(name, description, id, status, taskType, duration, startTime);

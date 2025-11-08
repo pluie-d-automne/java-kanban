@@ -1,97 +1,159 @@
-import manager.InMemoryTaskManager;
+import exceptions.NotFoundException;
+import exceptions.PeriodOverlapException;
+import manager.*;
 import task.*;
 import java.time.LocalDateTime;
 
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getInmemoryTaskManager();
 
-        taskManager.createTask(
-                new Task(
-                        "Сделать зарядку",
-                        "Пробежать 30 минут",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.TASK,
-                        30,
-                        LocalDateTime.parse("2025-10-01T07:10:00")
-                )
-        );
-        taskManager.createTask(
-                new Task(
-                        "Сходить в магазн",
-                        "Купить хлеб молоко шоколадку",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.TASK,
-                        30,
-                        LocalDateTime.parse("2025-10-01T07:15:00")
-                )
-        );
-        taskManager.createTask(
-                new Epic(
-                        "Собраться в отпуск",
-                        "Спланировать и подготовить всё что нужно для хорошего отпуска",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.EPIC,
-                        0,
-                        LocalDateTime.parse("1970-01-01T00:00:00"))
-        );
-        taskManager.createTask(
-                new Epic(
-                        "Освоить Java",
-                        "Научиться программировать на языке java",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.EPIC,
-                        0,
-                        LocalDateTime.parse("1970-01-01T00:00:00"))
-        );
-        taskManager.createTask(
-                new Subtask(
-                        "Купить билеты на самолёт",
-                        "Выбрать оптимальный рейс и купить билеты",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.SUBTASK,
-                        20,
-                        LocalDateTime.parse("2025-11-01T12:00:00"),
-                        taskManager.getEpicIdByName("Собраться в отпуск")
-                )
-        );
-        taskManager.createTask(
-                new Subtask(
-                        "Найти жильё",
-                        "Выбрать подходящий отель и забронировать проживание",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.SUBTASK,
-                        60,
-                        LocalDateTime.parse("2025-11-03T15:00:00"),
-                        taskManager.getEpicIdByName("Собраться в отпуск")
-                )
-        );
+        try {
+            taskManager.createTask(
+                    new Task(
+                            "Сделать зарядку",
+                            "Пробежать 30 минут",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.TASK,
+                            30,
+                            LocalDateTime.parse("2025-10-01T07:10:00")
+                    )
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
 
-        taskManager.createTask(
-                new Subtask(
-                        "Купить путеводитель",
-                        "-",
-                        taskManager.createTaskId(),
-                        TaskStatus.NEW,
-                        TaskType.SUBTASK,
-                        15,
-                        LocalDateTime.parse("2025-12-01T12:00:00"),
-                        taskManager.getEpicIdByName("Собраться в отпуск")
-                )
-        );
+        try {
+            taskManager.createTask(
+                    new Task(
+                            "Сходить в магазн",
+                            "Купить хлеб молоко шоколадку",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.TASK,
+                            30,
+                            LocalDateTime.parse("2025-10-01T07:15:00")
+                    )
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.createTask(
+                    new Epic(
+                            "Собраться в отпуск",
+                            "Спланировать и подготовить всё что нужно для хорошего отпуска",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.EPIC,
+                            0,
+                            LocalDateTime.parse("1970-01-01T00:00:00"))
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.createTask(
+                    new Epic(
+                            "Освоить Java",
+                            "Научиться программировать на языке java",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.EPIC,
+                            0,
+                            LocalDateTime.parse("1970-01-01T00:00:00"))
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.createTask(
+                    new Subtask(
+                            "Купить билеты на самолёт",
+                            "Выбрать оптимальный рейс и купить билеты",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.SUBTASK,
+                            20,
+                            LocalDateTime.parse("2025-11-01T12:00:00"),
+                            taskManager.getEpicIdByName("Собраться в отпуск")
+                    )
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.createTask(
+                    new Subtask(
+                            "Найти жильё",
+                            "Выбрать подходящий отель и забронировать проживание",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.SUBTASK,
+                            60,
+                            LocalDateTime.parse("2025-11-03T15:00:00"),
+                            taskManager.getEpicIdByName("Собраться в отпуск")
+                    )
+            );
+        } catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.createTask(
+                    new Subtask(
+                            "Купить путеводитель",
+                            "-",
+                            taskManager.createTaskId(),
+                            TaskStatus.NEW,
+                            TaskType.SUBTASK,
+                            15,
+                            LocalDateTime.parse("2025-12-01T12:00:00"),
+                            taskManager.getEpicIdByName("Собраться в отпуск")
+                    )
+            );
+        }  catch (PeriodOverlapException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println("\nЗапросим задачи в разном порядке:");
-        taskManager.getEpicById(3);
-        taskManager.getEpicById(4);
-        taskManager.getTaskById(2);
-        taskManager.getTaskById(1);
-        taskManager.getTaskById(2);
+
+        try {
+            taskManager.getEpicById(3);
+        }  catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getEpicById(4);
+        }  catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getTaskById(2);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getTaskById(1);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            taskManager.getTaskById(2);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 
@@ -107,12 +169,24 @@ public class Main {
         System.out.println(taskManager.getHistory());
 
         System.out.println("Удалим задачу 5");
-        taskManager.dropTaskById(5);
+
+        try {
+            taskManager.deleteTask(5);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 
         System.out.println("Удалим эпик 3 - с подзадачами");
-        taskManager.dropTaskById(3);
+
+        try {
+            taskManager.deleteEpic(3);
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
 

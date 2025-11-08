@@ -170,7 +170,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         Task subtask1 = taskManager.getSubtaskById(subtask1Id);
         Task subtask2 = taskManager.getSubtaskById(subtask2Id);
-        taskManager.dropTaskById(subtask1Id);
+        taskManager.deleteSubtask(subtask1Id);
         Epic epic = taskManager.getEpicById(epicId);
         List<Task> subtasks = epic.getSubtasks();
 

@@ -27,7 +27,11 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    int dropTaskById(int id);
+    int deleteTask(int id);
+
+    int deleteSubtask(int id);
+
+    int deleteEpic(int id);
 
     int createTask(Task task);
 
@@ -40,4 +44,6 @@ public interface TaskManager {
     Integer getEpicIdByName(String name);
 
     boolean checkTwoTasksOverlap(Task task1, Task task2);
+
+    public List<Task> getHistory();
 }
